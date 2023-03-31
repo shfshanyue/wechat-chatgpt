@@ -4,8 +4,11 @@ import { routes } from '../message'
 
 // 默认只回复私聊，以及艾特我的群聊
 async function defaultFilter(msg: Message) {
-  const messionSelf = await msg.mentionSelf()
-  return msg.type() === MessageType.Text && (!msg.room() || (msg.room() && messionSelf))
+  const metionSelf = await msg.mentionSelf()
+  return (
+    msg.type() === MessageType.Text &&
+    (!msg.room() || (msg.room() && metionSelf))
+  )
 }
 
 const createdAt = Date.now()
@@ -18,7 +21,8 @@ export async function handleMessage(msg: Message) {
   if (msg.talker().self()) {
     return
   }
-  if (!defaultFilter(msg)) {
+  const enable = await defaultFilter(msg)
+  if (!enable) {
     return
   }
 
