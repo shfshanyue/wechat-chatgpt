@@ -3,3 +3,4 @@ node_modules
 data
 service/article.ts
 package-lock.json
+.env

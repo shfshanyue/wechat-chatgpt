@@ -2,9 +2,10 @@ import { Message } from 'wechaty'
 import { Message as MessageType } from 'wechaty-puppet/types'
 import { routes } from '../message'
 
-// 默认只回复私聊
+// 默认只回复私聊，以及艾特我的群聊
 async function defaultFilter(msg: Message) {
-  return msg.type() === MessageType.Text && !msg.room()
+  const messionSelf = await msg.mentionSelf()
+  return msg.type() === MessageType.Text && (!msg.room() || (msg.room() && messionSelf))
 }
 
 const createdAt = Date.now()
@@ -13,9 +14,11 @@ export async function handleMessage(msg: Message) {
   if (msg.date().getTime() < createdAt) {
     return
   }
-  // 如果是群聊，但没有艾特我，则不理睬
-  const messionSelf = await msg.mentionSelf()
-  if (msg.room() && !messionSelf) {
+  // 如果是自己发的消息，则不理睬
+  if (msg.talker().self()) {
+    return
+  }
+  if (!defaultFilter(msg)) {
     return
   }
 
@@ -32,6 +35,6 @@ export async function handleMessage(msg: Message) {
   if (!filter || !route) {
     return
   }
-  const data = await route.handle(text)
+  const data = await route.handle(text, msg)
   await msg.say(data)
 }

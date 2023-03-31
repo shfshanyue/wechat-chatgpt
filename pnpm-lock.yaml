@@ -7,7 +7,9 @@ specifiers:
   '@types/lodash': ^4.14.191
   axios: ^1.3.4
   cron: ^2.3.0
+  dotenv: ^16.0.3
   lodash: ^4.17.21
+  midash: ^0.8.2
   nodemon: ^2.0.22
   npm-check-updates: ^16.8.0
   p-filter: ^3.0.0
@@ -26,7 +28,9 @@ dependencies:
   '@types/cron': 2.0.1
   '@types/lodash': 4.14.191
   cron: 2.3.0
+  dotenv: 16.0.3
   lodash: 4.17.21
+  midash: 0.8.2
   nodemon: 2.0.22
   npm-check-updates: 16.8.0
   p-filter: 3.0.0
@@ -2907,6 +2911,11 @@ packages:
     dependencies:
       braces: 3.0.2
       picomatch: 2.3.1
+    dev: false
+
+  /midash/0.8.2:
+    resolution: {integrity: sha512-P8nzSWlA+zQhRCQsmDqQBCsLS+lpRC+M0/IVRKeE/27+ooRaUUuO7QsdZXqrbW966aOBxsIeINVEJTz8nRhm+w==}
+    engines: {node: '>=14'}
     dev: false
 
   /mime-db/1.52.0:

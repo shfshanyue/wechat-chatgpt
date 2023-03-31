@@ -11,11 +11,11 @@ import { schedule } from './schedule'
 import config from './config'
 
 Sentry.init({
-  dsn: config.sentryDsn
+  dsn: (config as any)?.sentryDsn || ''
 })
 
 const bot = WechatyBuilder.build({
-  // name: 'wechat-shanyue',
+  name: 'wechat-shanyue',
   puppetOptions: {
     uos: true, // 开启uos协议
   },
