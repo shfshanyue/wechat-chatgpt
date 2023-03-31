@@ -7,6 +7,7 @@
 + 群聊控制：可通过正则表达式根据群聊名称控制在哪个群开启机器人
 + 私聊控制：可通过正则表达式根据私聊微信昵称控制开启机器人
 + 支持日志：可查看每天多少条记录
++ 反向代理：为不同地区提供更快的 OpenAI 的代理 API 地址
 
 ## 配置与环境变量
 
@@ -17,6 +18,7 @@ export default {
   // 自动同意添加好友的口令
   acceptText: /芝麻开门/,
 
+  // 如果微信机器人跑在国内，必须配置该项，其为官方 API 在国内的代理
   baseURL: process.env.BASE_URL || 'https://api.openai.com/v1',
   apiKey: process.env.OPEN_API_KEY.split(','),
   model: process.env.GPT_MODEL || 'gpt-3.5-turbo',
@@ -34,7 +36,7 @@ export default {
 }
 ```
 
-对于 OpenAI 的 `key` 及国内代理 BaseURL 等敏感地址，可以置于环境变量中，编辑 `.env` 配置文件。
+对于 OpenAI 的 `key` 及国内代理 BaseURL 等敏感数据，可以置于环境变量中，编辑 `.env` 配置文件。
 
 ``` .env
 OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC"
@@ -48,13 +50,57 @@ OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC,k-xxxxxxxxxxxxxxx
 
 ## 步骤
 
-1. 开启一个微信机器人，使用将要作为机器人的微信扫码进行登录
+1. 编辑环境变量
+
+``` bash
+$ cp .example.env .env
+```
+
+并编辑以下环境变量。**注意，如果你在国内服务器部署，必须配置 `BASE_URL` 环境变量，其为 OpenAI 在国内的代理 API，需自行搭建**。
+
+``` bash
+# 如果部署在 vercel 等境外服务器，则不需要此项配置
+# 如果部署在境内，可以使用山月的临时代理 API，不过强烈建议自行搭建
+BASE_URL="https://ai.devtool.tech/proxy"
+OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+2. 编辑是否允许群聊以及私聊
+
+编辑 `./config.ts`，配置是否开启群聊以及私聊模式。
+
+``` js
+{
+  // 判断在哪里开启机器人，默认是私聊以及艾特机器人的群聊
+  // 是否开启群聊模式，可使用正则以及 boolen，如果是正则用以决定在那些群开启群聊
+  enableGroup: true,
+
+  // 或者只允许在特定的群开启群聊
+  enableGroup: /^(技术交流群|面试直通车|学习)$/,
+
+  // 是否开启私聊模式，可使用正则以及 boolen，如果是正则用以决定与谁私聊
+  enablePrivate: true,
+
+  // 或者只允许对特定的人开启私聊
+  enablePrivate: /(山月)/,
+}
+```
+
+3. 开启一个微信机器人，使用将要作为机器人的微信扫码进行登录
 
 ``` bash
 $ npm start
 ```
 
-2. 与机器人对话
+待出现登录成功字样时，则成功开启。
+
+4. 健康检查
+
+向机器人发送 `/ping` 指定，它会默认回复 `pong`。以确保机器人已经正常工作。
+
+<img src="https://static.shanyue.tech/images/23-03-31/clipboard-7744.654969.webp" width="400">
+
+5. 与机器人对话
 
 <img src="https://static.shanyue.tech/images/23-03-31/clipboard-5702.703b02.webp" width="400">
 
