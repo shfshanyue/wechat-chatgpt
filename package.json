@@ -9,7 +9,7 @@
     "dev": "nodemon index.ts"
   },
   "engines": {
-    "node": ">= 16"
+    "node": ">= 18"
   },
   "author": "",
   "license": "ISC",
