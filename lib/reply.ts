@@ -35,7 +35,8 @@ export async function reply(messages: ChatMessage[]) {
       }))
       return data.choices[0].message.content
     })
-    .catch(() => {
+    .catch((e) => {
+      console.error(e)
       return '抱歉，我发生了一点小意外。'
     })
 }
