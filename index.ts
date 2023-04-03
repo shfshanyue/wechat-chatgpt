@@ -20,6 +20,9 @@ const bot = WechatyBuilder.build({
     uos: true, // 开启uos协议
   },
   puppet: 'wechaty-puppet-wechat',
+
+  // 可采用基于 iPad 协议的 PUPPET
+  // puppet: 'wechaty-puppet-padlocal'
 })
 
 function handleScan(qrcode: string) {

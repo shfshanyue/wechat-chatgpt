@@ -11,7 +11,8 @@
 
 ## 环境要求
 
-需要 `node.js` 版本大于 `18`。
+1. `node.js >= 18`
+2. 基于 Web 协议的机器人最近有可能被封禁，可采用 iPad 其它协议的机器人，可在 `index.ts` 中更换其他 `Puppet`。
 
 ## 配置与环境变量
 
@@ -20,7 +21,7 @@
 ``` ts
 export default {
   // 自动同意添加好友的口令
-  acceptText: /芝麻开门/,
+  acceptText: /ChatGPT/,
 
   // 如果微信机器人跑在国内，必须配置该项，其为官方 API 在国内的代理
   baseURL: process.env.BASE_URL || 'https://api.openai.com/v1',
@@ -110,5 +111,5 @@ $ npm start
 
 ## 交流
 
-<img src="https://static.shanyue.tech/images/23-03-22/clipboard-5137.800093.webp" width="300">
+<img src="https://static.shanyue.tech/images/23-04-02/wechat.892011.webp" width="600">
 
