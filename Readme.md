@@ -111,5 +111,9 @@ $ npm start
 
 ## 交流
 
+如需协助部署，或者二次开发定制服务，可添加微信。
+
+如需技术交流，可添加微信或者进入飞书群。
+
 <img src="https://static.shanyue.tech/images/23-04-02/wechat.892011.webp" width="600">
 
