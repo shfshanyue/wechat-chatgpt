@@ -28,7 +28,13 @@ export const routes: Route[] = [
           content: `${config.prompt} ${text}`,
         },
       ])
-      return msg.room() ? `@${talker.name()} ${answer}` : answer
+      if (msg.room()) {
+        const isLontText = text.length > 20
+        return `@${talker.name()}  ${text.slice(0, 20)}${isLontText ? '...' : ''}
+---------------------------------
+${answer}`
+      }
+      return answer
     },
     async filter (msg) {
       const room = msg.room()
