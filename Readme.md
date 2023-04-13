@@ -94,6 +94,8 @@ OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 3. 开启一个微信机器人，使用将要作为机器人的微信扫码进行登录
 
 ``` bash
+$ pnpm i
+
 $ npm start
 ```
 
@@ -108,6 +110,18 @@ $ npm start
 5. 与机器人对话
 
 <img src="https://static.shanyue.tech/images/23-03-31/clipboard-5702.703b02.webp" width="400">
+
+## 部署方式
+
+### Docker
+
+``` bash
+# 启动服务，并在后台启动
+$ docker compose up -d --build
+
+# 查看日志，并扫码登录
+$ docker compose logs --tail 100 --follow
+```
 
 ## 交流
 

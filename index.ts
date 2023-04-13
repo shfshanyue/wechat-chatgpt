@@ -15,11 +15,14 @@ Sentry.init({
 })
 
 const bot = WechatyBuilder.build({
-  name: 'wechat-shanyue',
+  // name: 'wechat-shanyue',
   puppetOptions: {
     uos: true, // 开启uos协议
+    tls: {
+      disable: true
+    }
   },
-  puppet: 'wechaty-puppet-wechat',
+  // puppet: 'wechaty-puppet-wechat',
 
   // 可采用基于 iPad 协议的 PUPPET
   // puppet: 'wechaty-puppet-padlocal'

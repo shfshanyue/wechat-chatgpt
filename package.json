@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "NODE_OPTIONS='--dns-result-order=ipv4first' ts-node index.ts",
     "ncu": "ncu",
     "dev": "nodemon index.ts"
   },

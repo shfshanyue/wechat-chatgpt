@@ -1,0 +1,6 @@
+version: '3'
+services:
+  wechat-chatgpt:
+    build: .
+    env_file:
+      - .env
