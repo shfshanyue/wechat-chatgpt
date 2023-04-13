@@ -2,12 +2,13 @@
 
 三分钟，创建一个 ChatGPT AI 小助手。
 
-+ 负载均衡：多个 Token 增强其稳定性
-+ 场景模式：可通过 PROMPT 配置机器人为专业的翻译、面试官、医生等
-+ 群聊控制：可通过正则表达式根据群聊名称控制在哪个群开启机器人
-+ 私聊控制：可通过正则表达式根据私聊微信昵称控制开启机器人
-+ 支持日志：可查看每天多少条记录
-+ 反向代理：为不同地区提供更快的 OpenAI 的代理 API 地址
++ [x] 负载均衡：多个 OpenAI Token 增强其稳定性
++ [x] 场景模式：可通过 PROMPT 配置机器人为专业的翻译、面试官、医生等
++ [x] 群聊控制：可通过正则表达式根据群聊名称控制在哪个群开启机器人
++ [x] 私聊控制：可通过正则表达式根据私聊微信昵称控制开启机器人
++ [x] 支持日志：可查看每天多少条记录
++ [x] 反向代理：为不同地区提供更快的 OpenAI 的代理 API 地址
++ [x] 企业微信：支持企业微信
 
 ## 环境要求
 
@@ -51,6 +52,16 @@ OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC"
 
 ``` .env
 OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC,k-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC,k-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC"
+```
+
+## 企业微信
+
+如果需要企业微信作为机器人，请编辑环境变量，更换 PUPPET
+
+``` bash
+# 如果是企业微信的话，使用以下两行代码
+WECHATY_PUPPET_SERVICE_TOKEN="puppet_workpro_xxxxxxxxx"
+WECHATY_PUPPET="wechaty-puppet-service"
 ```
 
 ## 步骤
@@ -121,6 +132,12 @@ $ docker compose up -d --build
 
 # 查看日志，并扫码登录
 $ docker compose logs --tail 100 --follow
+```
+
+### 裸机部署
+
+``` bash
+$ npm start
 ```
 
 ## 交流

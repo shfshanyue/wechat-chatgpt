@@ -15,7 +15,7 @@ Sentry.init({
 })
 
 const bot = WechatyBuilder.build({
-  // name: 'wechat-shanyue',
+  name: 'wechat-shanyue',
   puppetOptions: {
     uos: true, // 开启uos协议
     tls: {
