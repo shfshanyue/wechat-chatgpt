@@ -1,6 +1,10 @@
 import Koa from 'koa'
-import { createBot } from './bot'
 import { WechatyInterface } from 'wechaty/impls'
+
+import { createBot } from './bot'
+import * as message from './event/message'
+import * as friendShip from './event/friend-ship'
+import * as roomJoin from './event/room-join'
 
 const app = new Koa()
 
@@ -22,6 +26,9 @@ function listen(bot: WechatyInterface): Promise<{
           data: user
         })
       })
+      .on('room-join', roomJoin.handleRoomJoin)
+      .on('friendship', friendShip.handleFriendShip)
+      .on('message', message.handleMessage)
       .start()
   })
 }
@@ -30,7 +37,7 @@ app.use(async (ctx) => {
   const bot = createBot()
   const { type, data } = await listen(bot)
   if (type === 'scan') {
-    ctx.body = data
+    ctx.body = `<img style="width: 300" src="https://devtool.shanyue.tech/api/qrcode?data=${encodeURIComponent(data)}">`
   } else {
     ctx.body = '已登录'
   }

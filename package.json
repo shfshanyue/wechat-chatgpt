@@ -1,12 +1,13 @@
 {
-  "name": "wechat-covid19",
+  "name": "wechat-chatgpt",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "bot.ts",
   "scripts": {
     "start": "NODE_OPTIONS='--dns-result-order=ipv4first' ts-node bot.ts",
+    "server": "NODE_OPTIONS='--dns-result-order=ipv4first' ts-node server.ts",
     "ncu": "ncu",
-    "dev": "nodemon index.ts"
+    "dev": "nodemon bot.ts"
   },
   "engines": {
     "node": ">= 18"
