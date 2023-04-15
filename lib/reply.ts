@@ -29,6 +29,9 @@ export async function reply(messages: ChatMessage[]) {
   })
     .then((res) => res.json())
     .then((data) => {
+      if (!data.choices.length) {
+        console.log('Error', data)
+      }
       console.log(JSON.stringify({
         input: messages,
         output: data.choices[0].message
