@@ -40,5 +40,7 @@ export async function handleMessage(msg: Message) {
     return
   }
   const data = await route.handle(text, msg)
-  await msg.say(data)
+  if (data) {
+    await msg.say(data)
+  }
 }

@@ -1,5 +1,7 @@
 import config from '../config'
 import { sample } from 'midash'
+import wretch from 'wretch'
+import { retry } from 'wretch/middlewares'
 
 type ChatMessage = {
   role: 'system' | 'user' | 'assistant'
@@ -16,26 +18,35 @@ type GPTModel =
 
 export async function reply(messages: ChatMessage[]) {
   const apiKey = sample(config.apiKey)
-  return fetch(`${config.baseURL}/v1/chat/completions`, {
-    headers: {
+  const w = wretch(config.baseURL).middlewares([
+    retry({
+      delayTimer: 500,
+      maxAttempts: 3,
+      until: (response, error) => response && response.ok
+    })
+  ])
+  return w
+    .url('/v1/chat/completions')
+    .headers({
       Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify({
-      model: config.model,
-      messages,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
+      'Content-Type': 'application/json'
+    })
+    .post(
+      JSON.stringify({
+        model: config.model,
+        messages
+      })
+    )
+    .json((data) => {
       if (!data.choices.length) {
         console.log('Error', data)
       }
-      console.log(JSON.stringify({
-        input: messages,
-        output: data.choices[0].message
-      }))
+      console.log(
+        JSON.stringify({
+          input: messages,
+          output: data.choices[0].message
+        })
+      )
       return data.choices[0].message.content
     })
     .catch((e) => {
