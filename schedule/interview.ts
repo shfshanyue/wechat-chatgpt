@@ -6,7 +6,7 @@ export default async (bot: Wechaty) => {
     const rooms = await bot.Room.findAll({ topic: /学习/ })
     for (const room of rooms) {
       if (room.owner().name().includes('山月')) {
-        await room.say('早安')
+        // await room.say('早安')
       }
     }
   }, null, true, 'Asia/Shanghai')
