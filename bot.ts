@@ -40,13 +40,34 @@ if (require.main === module) {
   bot.on('scan', handleScan)
     .on('room-join', roomJoin.handleRoomJoin)
     .on('friendship', friendShip.handleFriendShip)
-    .on('message', message.handleMessage)
+    .on('message', msg => {
+      message
+        .handleMessage(msg)
+        .catch(e => {
+          Sentry.captureException(e)
+          return msg.say('抱歉，我发生了一点小意外。')
+        })
+        .catch(e => {
+          Sentry.captureException(e)
+        })
+    })
     .on('login', () => {
       console.log(bot.name(), '登录成功')
       schedule(this)
     })
     .on('error', (error) => {
+      console.error(error)
       Sentry.captureException(error)
     })
     .start()
+
+  process.on('uncaughtException', e => {
+    console.error('UN_CAUGHT_EXCEPTION', e)
+    Sentry.captureException(e)
+  })
+
+  process.on('unhandledRejection', e => {
+    console.error('UN_HANDLED_REJECTION', e)
+    Sentry.captureException(e)
+  })
 }
