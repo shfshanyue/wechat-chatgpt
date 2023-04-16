@@ -35,8 +35,7 @@
     "wechaty-puppet": "^1.20.2",
     "wechaty-puppet-padlocal": "^1.20.1",
     "wechaty-puppet-wechat": "^1.18.4",
-    "wretch": "^2.5.2",
-    "wretch-middlewares": "^0.1.13"
+    "wretch": "^2.5.2"
   },
   "devDependencies": {
     "@types/koa": "^2.13.6",

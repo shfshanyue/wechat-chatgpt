@@ -31,12 +31,10 @@ export async function reply(messages: ChatMessage[]) {
       Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json'
     })
-    .post(
-      JSON.stringify({
-        model: config.model,
-        messages
-      })
-    )
+    .post({
+      model: config.model,
+      messages
+    })
     .json((data) => {
       if (!data.choices.length) {
         console.log('Error', data)
