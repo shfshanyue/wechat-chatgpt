@@ -2,6 +2,7 @@ import config from '../config'
 import { sample } from 'midash'
 import wretch from 'wretch'
 import { retry } from 'wretch/middlewares/retry'
+import { logger } from './logger'
 
 type ChatMessage = {
   role: 'system' | 'user' | 'assistant'
@@ -37,9 +38,9 @@ export async function reply(messages: ChatMessage[]) {
     })
     .json((data) => {
       if (!data.choices.length) {
-        console.log('Error', data)
+        logger.error('Error', data)
       }
-      console.log(
+      logger.info(
         JSON.stringify({
           input: messages,
           output: data.choices[0].message
@@ -48,7 +49,7 @@ export async function reply(messages: ChatMessage[]) {
       return data.choices[0].message.content
     })
     .catch((e) => {
-      console.error(e)
+      logger.error(e)
       return '抱歉，我发生了一点小意外。'
     })
 }

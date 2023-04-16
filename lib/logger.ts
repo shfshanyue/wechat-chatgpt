@@ -1,6 +1,6 @@
 import { createLogger, format, transports } from 'winston'
 
-export const msgLogger = createLogger({
+export const logger = createLogger({
   transports: [
     new transports.File({
       filename: 'logs/info.log',
@@ -13,7 +13,8 @@ export const msgLogger = createLogger({
     new transports.File({
       filename: 'logs/warn.log',
       level: 'warning'
-    })
+    }),
+    new transports.Console({})
   ],
   format: format.combine(
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
@@ -22,7 +23,7 @@ export const msgLogger = createLogger({
     format.align(),
     format.simple(),
     format.printf(
-      (info) => `${info.level}: ${[info.timestamp]}: ${info.message}`
+      (info) => `${info.level} ${[info.timestamp]} ${info.message}`
     )
   )
 })

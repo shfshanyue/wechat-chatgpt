@@ -26,12 +26,12 @@ export default {
 
   // 判断在哪里开启机器人，默认是私聊以及艾特机器人的群聊
   // 是否开启群聊模式，可使用正则以及 boolen，如果是正则用以决定在那些群开启群聊
-  enableGroup: /^(技术交流群|面试直通车|学习)$/,
-  // enableGroup: true,
+  // enableGroup: /^(技术交流群|面试直通车|学习)$/,
+  enableGroup: true,
 
   // 是否开启私聊模式，可使用正则以及 boolen，如果是正则用以决定与谁私聊
-  // enablePrivate: true,
-  enablePrivate: /(山月)/,
+  enablePrivate: true,
+  // enablePrivate: /(山月)/,
 
   // 开启异常报错上传 sentry
   sentryDsn: process.env.SENTRY_DSN || ''
