@@ -1,7 +1,7 @@
 import config from '../config'
 import { sample } from 'midash'
 import wretch from 'wretch'
-import { retry } from 'wretch/middlewares'
+import { retry } from 'wretch/middlewares/retry'
 
 type ChatMessage = {
   role: 'system' | 'user' | 'assistant'
