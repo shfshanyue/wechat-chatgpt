@@ -25,7 +25,6 @@ specifiers:
   wechaty-puppet-padlocal: ^1.20.1
   wechaty-puppet-wechat: ^1.18.4
   wretch: ^2.5.2
-  wretch-middlewares: ^0.1.13
 
 dependencies:
   '@sentry/node': 7.44.2
@@ -49,7 +48,6 @@ dependencies:
   wechaty-puppet-padlocal: 1.20.1_wechaty-puppet@1.20.2
   wechaty-puppet-wechat: 1.18.4_wechaty-puppet@1.20.2
   wretch: registry.npmmirror.com/wretch/2.5.2
-  wretch-middlewares: registry.npmmirror.com/wretch-middlewares/0.1.13_wretch@2.5.2
 
 devDependencies:
   '@types/koa': 2.13.6
@@ -69,6 +67,13 @@ packages:
     dependencies:
       regenerator-runtime: 0.13.11
     dev: false
+
+  /@colors/colors/1.5.0:
+    resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
+    engines: {node: '>=0.1.90'}
+    requiresBuild: true
+    dev: false
+    optional: true
 
   /@cspotcode/source-map-support/0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -915,6 +920,14 @@ packages:
     resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
     dev: false
 
+  /@types/yauzl/2.10.0:
+    resolution: {integrity: sha512-Cn6WYCm0tXv8p6k+A8PvbDG763EDpBoTzHdA+Q/MF6H3sapGjCm9NzoaJncJS9tUKSuCoDs9XHxYYsQDgxR6kw==}
+    requiresBuild: true
+    dependencies:
+      '@types/node': 18.15.5
+    dev: false
+    optional: true
+
   /abbrev/1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
     dev: false
@@ -1381,7 +1394,7 @@ packages:
       normalize-path: 3.0.0
       readdirp: 3.6.0
     optionalDependencies:
-      fsevents: registry.npmmirror.com/fsevents/2.3.2
+      fsevents: 2.3.2
     dev: false
 
   /chownr/1.1.4:
@@ -1421,7 +1434,7 @@ packages:
     dependencies:
       string-width: 4.2.3
     optionalDependencies:
-      '@colors/colors': registry.npmmirror.com/@colors/colors/1.5.0
+      '@colors/colors': 1.5.0
     dev: false
 
   /cliui/6.0.0:
@@ -1875,6 +1888,14 @@ packages:
       level-errors: 3.0.1
     dev: false
 
+  /encoding/0.1.13:
+    resolution: {integrity: sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==}
+    requiresBuild: true
+    dependencies:
+      iconv-lite: 0.6.3
+    dev: false
+    optional: true
+
   /end-of-stream/1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
     dependencies:
@@ -1934,7 +1955,7 @@ packages:
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
-      '@types/yauzl': registry.npmmirror.com/@types/yauzl/2.10.0
+      '@types/yauzl': 2.10.0
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -2174,6 +2195,14 @@ packages:
   /fs.realpath/1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
     dev: false
+
+  /fsevents/2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
 
   /function-bind/1.1.1:
     resolution: {integrity: sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==}
@@ -2780,7 +2809,7 @@ packages:
     dependencies:
       universalify: 2.0.0
     optionalDependencies:
-      graceful-fs: registry.npmmirror.com/graceful-fs/4.2.11
+      graceful-fs: 4.2.11
     dev: false
 
   /jsonlines/0.1.1:
@@ -3278,7 +3307,7 @@ packages:
       minipass-sized: 1.0.3
       minizlib: 2.1.2
     optionalDependencies:
-      encoding: registry.npmmirror.com/encoding/0.1.13
+      encoding: 0.1.13
     dev: false
 
   /minipass-fetch/3.0.1:
@@ -3289,7 +3318,7 @@ packages:
       minipass-sized: 1.0.3
       minizlib: 2.1.2
     optionalDependencies:
-      encoding: registry.npmmirror.com/encoding/0.1.13
+      encoding: 0.1.13
     dev: false
 
   /minipass-flush/1.0.5:
@@ -4906,7 +4935,7 @@ packages:
   /typed-emitter/1.5.0-from-event:
     resolution: {integrity: sha512-KfCo0Zhj/5HSs5gxBINypaS/vMg/8KwyWeuD3YsBsIT95vRopuYWc5LE7sqpWydzNc6Zd/uQ1EHPZ/dpsmJSzw==}
     optionalDependencies:
-      rxjs: registry.npmmirror.com/rxjs/7.8.0
+      rxjs: 7.8.0
     dev: false
 
   /typedarray-to-buffer/3.1.5:
@@ -5523,58 +5552,11 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  registry.npmmirror.com/@colors/colors/1.5.0:
-    resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@colors/colors/-/colors-1.5.0.tgz}
-    name: '@colors/colors'
-    version: 1.5.0
-    engines: {node: '>=0.1.90'}
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  registry.npmmirror.com/@types/yauzl/2.10.0:
-    resolution: {integrity: sha512-Cn6WYCm0tXv8p6k+A8PvbDG763EDpBoTzHdA+Q/MF6H3sapGjCm9NzoaJncJS9tUKSuCoDs9XHxYYsQDgxR6kw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/yauzl/-/yauzl-2.10.0.tgz}
-    name: '@types/yauzl'
-    version: 2.10.0
-    requiresBuild: true
-    dependencies:
-      '@types/node': 18.15.5
-    dev: false
-    optional: true
-
-  registry.npmmirror.com/encoding/0.1.13:
-    resolution: {integrity: sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/encoding/-/encoding-0.1.13.tgz}
-    name: encoding
-    version: 0.1.13
-    requiresBuild: true
-    dependencies:
-      iconv-lite: 0.6.3
-    dev: false
-    optional: true
-
-  registry.npmmirror.com/fsevents/2.3.2:
-    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/fsevents/-/fsevents-2.3.2.tgz}
-    name: fsevents
-    version: 2.3.2
-    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   registry.npmmirror.com/graceful-fs/4.2.10:
     resolution: {integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/graceful-fs/-/graceful-fs-4.2.10.tgz}
     name: graceful-fs
     version: 4.2.10
     dev: false
-
-  registry.npmmirror.com/graceful-fs/4.2.11:
-    resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/graceful-fs/-/graceful-fs-4.2.11.tgz}
-    name: graceful-fs
-    version: 4.2.11
-    requiresBuild: true
-    dev: false
-    optional: true
 
   registry.npmmirror.com/rxjs/7.8.0:
     resolution: {integrity: sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/rxjs/-/rxjs-7.8.0.tgz}
@@ -5582,17 +5564,6 @@ packages:
     version: 7.8.0
     dependencies:
       tslib: 2.5.0
-    dev: false
-
-  registry.npmmirror.com/wretch-middlewares/0.1.13_wretch@2.5.2:
-    resolution: {integrity: sha512-PngjqcaIHgF776r3ZXUL44Mh6BMQvealyJ0OBmC4GruNsV77c3wZGqboH6s0KvMCve4QEIBkIC6HEvQXpBeYsA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/wretch-middlewares/-/wretch-middlewares-0.1.13.tgz}
-    id: registry.npmmirror.com/wretch-middlewares/0.1.13
-    name: wretch-middlewares
-    version: 0.1.13
-    peerDependencies:
-      wretch: ^1.7.6
-    dependencies:
-      wretch: registry.npmmirror.com/wretch/2.5.2
     dev: false
 
   registry.npmmirror.com/wretch/2.5.2:
