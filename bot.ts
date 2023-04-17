@@ -9,6 +9,7 @@ import * as roomJoin from './event/room-join'
 
 import { schedule } from './schedule'
 import config from './config'
+import { logger } from './lib/logger'
 
 Sentry.init({
   dsn: (config as any)?.sentryDsn || ''
@@ -52,22 +53,22 @@ if (require.main === module) {
         })
     })
     .on('login', () => {
-      console.log(bot.name(), '登录成功')
+      logger.info(bot.name(), '登录成功')
       schedule(this)
     })
     .on('error', (error) => {
-      console.error(error)
+      logger.error(error)
       Sentry.captureException(error)
     })
     .start()
 
   process.on('uncaughtException', e => {
-    console.error('UN_CAUGHT_EXCEPTION', e)
+    logger.error('UN_CAUGHT_EXCEPTION', e)
     Sentry.captureException(e)
   })
 
   process.on('unhandledRejection', e => {
-    console.error('UN_HANDLED_REJECTION', e)
+    logger.error('UN_HANDLED_REJECTION', e)
     Sentry.captureException(e)
   })
 }
