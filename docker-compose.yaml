@@ -4,4 +4,8 @@ services:
     build: .
     env_file:
       - .env
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+      - ./logs:/code/logs
     restart: always
