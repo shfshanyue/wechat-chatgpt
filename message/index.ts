@@ -25,7 +25,7 @@ export const routes: Route[] = [
       const answer = await reply([
         {
           role: 'user',
-          content: `${config.prompt} ${text}`,
+          content: `${config.prompt}${text}`,
         },
       ])
       if (msg.room()) {

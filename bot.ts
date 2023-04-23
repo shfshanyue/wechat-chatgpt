@@ -57,7 +57,8 @@ if (require.main === module) {
       schedule(this)
     })
     .on('error', (error) => {
-      logger.error(error)
+      logger.error('WechatyError', error)
+      console.error(error)
       Sentry.captureException(error)
     })
     .start()

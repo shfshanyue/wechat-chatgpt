@@ -27,7 +27,7 @@ export async function handleMessage(msg: Message) {
   }
 
   const self = msg.listener()
-  const text = msg.text().replace('@' + self?.name(), '').trim() || ''
+  const text = await msg.mentionText()
   const route = routes.find((route) => {
     const keyword = route.keyword
     if (typeof keyword === 'string') {
