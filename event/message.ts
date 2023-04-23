@@ -1,6 +1,7 @@
 import { Message } from 'wechaty'
 import { Message as MessageType } from 'wechaty-puppet/types'
 import { routes } from '../message'
+import { logger } from '../lib/logger'
 
 // 默认只回复私聊，以及艾特我的群聊
 async function defaultFilter(msg: Message) {
@@ -26,7 +27,6 @@ export async function handleMessage(msg: Message) {
     return
   }
 
-  const self = msg.listener()
   const text = await msg.mentionText()
   const route = routes.find((route) => {
     const keyword = route.keyword
@@ -39,8 +39,18 @@ export async function handleMessage(msg: Message) {
   if (!filter || !route) {
     return
   }
-  const data = await route.handle(text, msg)
-  if (data) {
-    await msg.say(data)
+  const replyText = await route.handle(text, msg)
+  if (replyText) {
+    let group = null
+    if (msg.room()) {
+      group = await msg.room().topic()
+    }
+    logger.info(replyText.toString(), {
+      text,
+      reply: replyText,
+      user: msg.talker().name,
+      group
+    })
+    await msg.say(replyText)
   }
 }

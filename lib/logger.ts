@@ -20,10 +20,5 @@ export const logger = createLogger({
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     format.errors({ stack: true }),
     format.json(),
-    format.align(),
-    format.simple(),
-    format.printf(
-      (info) => `${info.level} ${[info.timestamp]} ${info.message}`
-    )
   )
 })

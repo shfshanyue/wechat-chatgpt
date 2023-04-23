@@ -53,7 +53,8 @@ if (require.main === module) {
         })
     })
     .on('login', () => {
-      logger.info(bot.name(), '登录成功')
+      const name = bot.currentUser.name()
+      logger.info(`${bot.name()}-${name} 登录成功`)
       schedule(this)
     })
     .on('error', (error) => {

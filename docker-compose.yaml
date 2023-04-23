@@ -8,4 +8,5 @@ services:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
       - ./logs:/code/logs
+      - ./wechat-shanyue.memory-card.json:/code/wechat-shanyue.memory-card.json
     restart: always

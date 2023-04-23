@@ -40,12 +40,6 @@ export async function reply(messages: ChatMessage[]) {
       if (!data.choices.length) {
         logger.error('Error', data)
       }
-      logger.info(
-        JSON.stringify({
-          input: messages,
-          output: data.choices[0].message
-        })
-      )
       return data.choices[0].message.content
     })
     .catch((e) => {
