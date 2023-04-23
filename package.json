@@ -4,8 +4,8 @@
   "description": "",
   "main": "bot.ts",
   "scripts": {
-    "start": "NODE_OPTIONS='--dns-result-order=ipv4first' ts-node bot.ts",
-    "server": "NODE_OPTIONS='--dns-result-order=ipv4first' ts-node server.ts",
+    "start": "NODE_OPTIONS='--dns-result-order=ipv4first' tsx bot.ts",
+    "server": "NODE_OPTIONS='--dns-result-order=ipv4first' tsx server.ts",
     "ncu": "ncu",
     "dev": "nodemon bot.ts"
   },
@@ -30,7 +30,7 @@
     "p-map": "^5.5.0",
     "pp-map": "^1.0.4",
     "qrcode-terminal": "^0.12.0",
-    "ts-node": "^10.9.1",
+    "tsx": "^3.12.6",
     "wechaty": "^1.20.2",
     "wechaty-puppet": "^1.20.2",
     "wechaty-puppet-padlocal": "^1.20.1",

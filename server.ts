@@ -1,5 +1,5 @@
 import Koa from 'koa'
-import { WechatyInterface } from 'wechaty/impls'
+import { Wechaty } from 'wechaty'
 
 import { createBot } from './bot'
 import * as message from './event/message'
@@ -8,7 +8,7 @@ import * as roomJoin from './event/room-join'
 
 const app = new Koa()
 
-function listen(bot: WechatyInterface): Promise<{
+function listen(bot: Wechaty): Promise<{
   type: 'scan' | 'login',
   data: any
 }> {
