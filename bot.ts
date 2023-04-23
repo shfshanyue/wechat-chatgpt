@@ -52,9 +52,10 @@ if (require.main === module) {
           Sentry.captureException(e)
         })
     })
-    .on('login', () => {
+    .on('login', async () => {
       const name = bot.currentUser.name()
-      logger.info(`${bot.name()}-${name} 登录成功`)
+      const alias = await bot.currentUser.alias()
+      logger.info(`${bot.name()}-${name}-${alias} 登录成功`)
       schedule(this)
     })
     .on('error', (error) => {
