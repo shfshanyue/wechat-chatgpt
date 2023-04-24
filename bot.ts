@@ -1,5 +1,6 @@
 import { WechatyBuilder } from 'wechaty'
 import * as Sentry from '@sentry/node'
+import { MemoryCard } from 'memory-card'
 
 import * as message from './event/message'
 import * as friendShip from './event/friend-ship'
@@ -15,7 +16,7 @@ Sentry.init({
 
 export function createBot() {
   return WechatyBuilder.build({
-    name: 'wechat-shanyue',
+    name: 'memory/wechat-shanyue',
     puppetOptions: {
       uos: true, // 开启uos协议
       tls: {

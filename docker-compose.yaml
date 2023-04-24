@@ -8,4 +8,5 @@ services:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
       - ./logs:/code/logs
+      - ./memory:/code/memory
     restart: always
