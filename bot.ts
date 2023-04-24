@@ -1,6 +1,4 @@
 import { WechatyBuilder } from 'wechaty'
-import { Contact as ContactType } from 'wechaty-puppet/types'
-import Qrterminal from 'qrcode-terminal'
 import * as Sentry from '@sentry/node'
 
 import * as message from './event/message'
@@ -32,7 +30,8 @@ export function createBot() {
 }
 
 function handleScan(qrcode: string) {
-  Qrterminal.generate(qrcode, { small: true })
+  // Qrterminal.generate(qrcode, { small: true })
+  console.log(`open https://devtool.tech/api/qrcode?data=${encodeURIComponent(qrcode)}`)
 }
 
 if (require.main === module) {

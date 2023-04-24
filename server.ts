@@ -37,7 +37,7 @@ app.use(async (ctx) => {
   const bot = createBot()
   const { type, data } = await listen(bot)
   if (type === 'scan') {
-    ctx.body = `<img style="width: 300" src="https://devtool.shanyue.tech/api/qrcode?data=${encodeURIComponent(data)}">`
+    ctx.body = `<img style="width: 300" src="https://devtool.tech/api/qrcode?data=${encodeURIComponent(data)}">`
   } else {
     ctx.body = '已登录'
   }
