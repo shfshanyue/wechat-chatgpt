@@ -48,7 +48,7 @@ export async function handleMessage(msg: Message) {
     logger.info(replyText.toString(), {
       text,
       reply: replyText,
-      user: msg.talker().name,
+      user: msg.talker().name(),
       group
     })
     await msg.say(replyText)
