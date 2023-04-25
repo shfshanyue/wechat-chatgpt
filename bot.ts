@@ -56,7 +56,7 @@ if (require.main === module) {
       const name = bot.currentUser.name()
       const alias = await bot.currentUser.alias()
       logger.info(`${bot.name()}-${name}-${alias} 登录成功`, { label: 'event' })
-      schedule(this)
+      schedule(bot)
     })
     .on('logout', () => {
       const name = bot.currentUser.name()

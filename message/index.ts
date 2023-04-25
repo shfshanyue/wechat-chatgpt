@@ -38,14 +38,14 @@ ${answer}`
     },
     async filter (msg) {
       const room = msg.room()
-      if (room && config.enableGroup) {
+      if (room && config.enableGroup && msg.text().startsWith(config.groupPrefix)) {
         if (config.enableGroup === true) {
           return true
         }
         const topic = await room.topic()
         return config.enableGroup.test(topic)
       }
-      if (!room && config.enablePrivate) {
+      if (!room && config.enablePrivate && msg.text().startsWith(config.privatePrefix)) {
         if (config.enablePrivate === true) {
           return true
         }

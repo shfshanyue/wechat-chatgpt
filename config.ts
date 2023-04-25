@@ -7,6 +7,8 @@ type Config = {
   acceptText: RegExp
   enableGroup: RegExp | boolean
   enablePrivate: RegExp | boolean
+  groupPrefix: string
+  privatePrefix: string
 
   baseURL: string
   apiKey: string[]
@@ -32,6 +34,9 @@ export default {
   // 是否开启私聊模式，可使用正则以及 boolen，如果是正则用以决定与谁私聊
   enablePrivate: true,
   // enablePrivate: /(山月)/,
+
+  groupPrefix: '',
+  privatePrefix: '山月',
 
   // 开启异常报错上传 sentry
   sentryDsn: process.env.SENTRY_DSN || ''

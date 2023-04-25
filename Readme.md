@@ -4,15 +4,16 @@
 
 + [x] 负载均衡：多个 OpenAI Token 增强其稳定性
 + [x] 场景模式：可通过 PROMPT 配置机器人为专业的翻译、面试官、医生等
-+ [x] 群聊控制：可通过正则表达式根据群聊名称控制在哪个群开启机器人
-+ [x] 私聊控制：可通过正则表达式根据私聊微信昵称控制开启机器人
++ [x] 群聊控制：可控制在那些群开启群聊，或关闭群聊
++ [x] 私聊控制：可控制在那些好友开启私聊，或关闭私聊
++ [x] 词语触发：支持通过关键字触发私聊、群聊的 AI 机器人
 + [x] 支持日志：可查看每天多少条记录
 + [x] 反向代理：为不同地区提供更快的 OpenAI 的代理 API 地址
 + [x] 企业微信：支持企业微信登录
 + [x] 自动重启：当发生异常，机器人自动退出后，支持自动重启
 + [x] 错误重试：当 chatgpt 未回复时，尝试三次，减少 chatgpt 罢工几率
-+ [ ] 命名模式：支持为你的机器人命名
-+ [ ] 连续对话：支持上下文消息
++ [x] 命名模式：支持为你的机器人命名
++ [x] 连续对话：支持上下文消息
 + [ ] 管理模式：内置管理员模式，可查看每个用户的对话次数
 + [ ] 查看余额：可查看该 key 还有多少余额，仅供管理员查看
 + [ ] PDF阅读：可阅读 PDF 等文件，并根据 PDF 内容进行回答
@@ -49,6 +50,12 @@ export default {
   // 是否开启私聊模式，可使用正则以及 boolen，如果是正则用以决定与谁私聊
   // enablePrivate: true,
   enablePrivate: /(山月)/,
+
+  // 私聊模式时，配置关键词触发
+  groupPrefix: '',
+
+  // 私聊模式时，配置关键词触发
+  privatePrefix: '山月',
 
   // 开启异常报错上传 sentry
   sentryDsn: process.env.SENTRY_DSN || ''
@@ -112,6 +119,12 @@ OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
   // 或者只允许对特定的人开启私聊
   enablePrivate: /(山月)/,
+
+  // 私聊模式时，配置关键词触发
+  groupPrefix: '',
+
+  // 私聊模式时，配置关键词触发
+  privatePrefix: '山月',
 }
 ```
 
@@ -120,10 +133,10 @@ OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ``` bash
 $ pnpm i
 
-$ npm start
+$ pnpm start
 ```
 
-待出现登录成功字样时，则成功开启。
+此时会出现二维码链接，通过链接链接打开二维码，扫码登录。待出现登录成功字样时，则机器人成功开启。
 
 4. 健康检查
 
@@ -150,7 +163,7 @@ $ docker compose logs --tail 100 --follow
 ### 裸机部署
 
 ``` bash
-$ npm start
+$ pnpm start
 ```
 
 ## 交流
