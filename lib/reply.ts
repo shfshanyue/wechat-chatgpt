@@ -3,6 +3,7 @@ import { sample } from 'midash'
 import wretch from 'wretch'
 import { retry } from 'wretch/middlewares/retry'
 import { retry as pRetry } from '@shanyue/promise-utils'
+import * as Sentry from '@sentry/node'
 import { logger } from './logger'
 
 type ChatMessage = {
@@ -47,9 +48,10 @@ export async function reply(messages: ChatMessage[]) {
       }
       return data.choices[0].message.content
     })
-  return pRetry(getReply, { times: 3 })
+  return pRetry(getReply, { times: 5 })
     .catch((e) => {
       logger.error(e)
+      Sentry.captureException(e)
       return '抱歉，我发生了一点小意外。'
     })
 }
