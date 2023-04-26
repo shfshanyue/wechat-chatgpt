@@ -21,6 +21,9 @@ export const routes: Route[] = [
   {
     keyword: '',
     async handle(text, msg) {
+      text = text
+        .replace(new RegExp(`^${config.groupPrefix}`), '')
+        .replace(new RegExp(`^${config.privatePrefix}`), '')
       const talker = msg.talker()
       const answer = await reply([
         {

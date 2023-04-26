@@ -55,16 +55,16 @@ if (require.main === module) {
     .on('login', async () => {
       const name = bot.currentUser.name()
       const alias = await bot.currentUser.alias()
-      logger.info(`${bot.name()}-${name}-${alias} 登录成功`, { label: 'event' })
+      logger.info(`${bot.name()}-${name}-${alias} 登录成功`, { label: 'event', event: 'login' })
       schedule(bot)
     })
     .on('logout', () => {
       const name = bot.currentUser.name()
-      logger.info(`${bot.name()}-${name} 退出登录`, { label: 'event' })
+      logger.info(`${bot.name()}-${name} 退出登录`, { label: 'event', event: 'logout' })
     })
     .on('stop', () => {
       const name = bot.currentUser.name()
-      logger.info(`${bot.name()}-${name} 退出`, { label: 'event' })
+      logger.info(`${bot.name()}-${name} 退出`, { label: 'event', event: 'stop' })
     })
     .on('error', (error) => {
       logger.error('WechatyError', error)

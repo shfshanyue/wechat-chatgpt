@@ -43,7 +43,7 @@ export async function reply(messages: ChatMessage[]) {
     })
     .json((data) => {
       if (!data.choices.length) {
-        logger.error('Error', data)
+        throw new Error('No Content')
       }
       return data.choices[0].message.content
     })
