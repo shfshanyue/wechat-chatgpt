@@ -12,6 +12,10 @@ github: https://github.com/shfshanyue
 `)
 
 export const handleRoomJoin = (room: Room, inviteeList: Contact[], inviter: Contact) => {
+  // 某些 Puppet 不支持群邀请事件
+  if (!room) {
+    return
+  }
   // 如果被邀请进个人群，则打招呼
   if ([/* 个人群的群主 ID 列表 */].includes(room.owner().id)) {
     inviteeList.forEach(c => {
