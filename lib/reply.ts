@@ -2,6 +2,7 @@ import config from '../config'
 import { sample } from 'midash'
 import wretch from 'wretch'
 import { retry } from 'wretch/middlewares/retry'
+import { retry as pRetry } from '@shanyue/promise-utils'
 import { logger } from './logger'
 
 type ChatMessage = {
@@ -19,14 +20,18 @@ type GPTModel =
 
 export async function reply(messages: ChatMessage[]) {
   const apiKey = sample(config.apiKey)
+
+  // TODO: wretch retry 中间件无法返回 40x 异常，需修复
   const w = wretch(config.baseURL).middlewares([
-    retry({
-      delayTimer: 500,
-      maxAttempts: 3,
-      until: (response, error) => response && response.ok
-    })
+    // retry({
+    //   delayTimer: 500,
+    //   maxAttempts: 3,
+    //   until (response, error) {
+    //     return response && response.ok
+    //   }
+    // })
   ])
-  return w
+  const getReply = () => w
     .url('/v1/chat/completions')
     .headers({
       Authorization: `Bearer ${apiKey}`,
@@ -42,6 +47,7 @@ export async function reply(messages: ChatMessage[]) {
       }
       return data.choices[0].message.content
     })
+  return pRetry(getReply, { times: 3 })
     .catch((e) => {
       logger.error(e)
       return '抱歉，我发生了一点小意外。'
