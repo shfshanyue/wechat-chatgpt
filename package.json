@@ -24,6 +24,7 @@
     "dotenv": "^16.0.3",
     "koa": "^2.14.2",
     "lodash": "^4.17.21",
+    "lru-cache": "^9.1.1",
     "memory-card": "^1.1.2",
     "midash": "^0.8.2",
     "nodemon": "^2.0.22",

@@ -9,6 +9,7 @@ import * as roomJoin from './event/room-join'
 import { schedule } from './schedule'
 import config from './config'
 import { logger } from './lib/logger'
+import { cache } from './lib/cache'
 
 Sentry.init({
   dsn: (config as any)?.sentryDsn || ''
@@ -32,6 +33,13 @@ export function createBot() {
 
 function handleScan(qrcode: string) {
   // Qrterminal.generate(qrcode, { small: true })
+  if (cache.get(qrcode)) {
+    return
+  }
+  // 十分钟不出现相同的二维码
+  cache.set(qrcode, 1, {
+    ttl: 10 * 60000
+  })
   console.log(`open https://devtool.tech/api/qrcode?data=${encodeURIComponent(qrcode)}`)
 }
 
