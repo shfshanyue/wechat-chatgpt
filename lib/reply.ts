@@ -19,6 +19,18 @@ type GPTModel =
   | 'gpt-3.5-turbo'
   | 'gpt-3.5-turbo-0301'
 
+const errorMessages = [
+  '抱歉，我没听懂你的意思，你可以再说一遍吗',
+  '对不起，我没有理解您的意思，请再说一遍。',
+  '抱歉，我不明白您想表达什么，请您提供更多细节。',
+  '不好意思，我需要更多信息来帮助您，您能否再解释一下您的问题？',
+  '我很抱歉，我需要更多上下文来理解您的意思，请您详细说明一下。',
+  '对不起，我听了您的问题，但是不太明白您的意思，您能否用不同的方式解释一下？',
+  '请您再慢慢说一遍，我听不太清楚，不太理解您的意思。',
+  '能否请您再用不同的方式描述一下，我才能更好地理解您所说的内容。',
+  '对不起，可能是我的理解能力有限，能否再解释一下？',
+]
+
 export async function reply(messages: ChatMessage[]) {
   const apiKey = sample(config.apiKey)
 
@@ -52,6 +64,7 @@ export async function reply(messages: ChatMessage[]) {
     .catch((e) => {
       logger.error(e)
       Sentry.captureException(e)
-      return '抱歉，我发生了一点小意外。'
+      // return '抱歉，我发生了一点小意外。'
+      return sample(errorMessages)
     })
 }

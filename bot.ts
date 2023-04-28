@@ -20,6 +20,7 @@ export function createBot() {
     name: 'memory/wechat-shanyue',
     puppetOptions: {
       uos: true, // 开启uos协议
+      timeoutSeconds: 4 * 60,
       tls: {
         disable: true
       }
