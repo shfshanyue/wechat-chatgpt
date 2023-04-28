@@ -4,4 +4,4 @@ data
 service/article.ts
 package-lock.json
 .env
-/logs
+*.log
