@@ -3,6 +3,7 @@ import config from '../config'
 import { reply } from '../lib/reply'
 import * as echo from './echo'
 import * as fund from './fund'
+import { cache } from '../lib/cache'
 
 type Route = {
   handle: ((text: string, msg: Message) => Sayable) | ((text: string, msg: Message) => Promise<Sayable>)
@@ -25,11 +26,25 @@ export const routes: Route[] = [
         .replace(new RegExp(`^${config.groupPrefix}`), '')
         .replace(new RegExp(`^${config.privatePrefix}`), '')
       const talker = msg.talker()
+      const conversation = msg.conversation()
+      const key = `Conversation:${conversation.id}:Message`
+      const history: any = cache.get(key) || []
       const answer = await reply([
+        ...history,
         {
           role: 'user',
           content: `${config.prompt}${text}`,
         },
+      ])
+      cache.set(key, [
+        {
+          role: 'user',
+          content: `${config.prompt}${text}`
+        },
+        {
+          role: 'assistant',
+          content: answer
+        }
       ])
       if (msg.room()) {
         const isLontText = text.length > 20

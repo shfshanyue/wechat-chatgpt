@@ -31,7 +31,7 @@ const errorMessages = [
   '对不起，可能是我的理解能力有限，能否再解释一下？',
 ]
 
-export async function reply(messages: ChatMessage[]) {
+export async function reply(messages: ChatMessage[]): Promise<string> {
   const apiKey = sample(config.apiKey)
 
   // TODO: wretch retry 中间件无法返回 40x 异常，需修复
