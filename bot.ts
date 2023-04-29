@@ -61,15 +61,14 @@ if (require.main === module) {
           Sentry.captureException(e)
         })
     })
-    .on('login', async () => {
-      const name = bot.currentUser.name()
-      const alias = await bot.currentUser.alias()
-      logger.info(`${bot.name()}-${name}-${alias} 登录成功`, { label: 'event', event: 'login' })
+    .on('login', async (user) => {
+      const name = user.name()
+      logger.info(`${bot.name()}-${name} 登录成功`, { label: 'event', event: 'login' })
       schedule(bot)
     })
-    .on('logout', () => {
-      const name = bot.currentUser.name()
-      logger.info(`${bot.name()}-${name} 退出登录`, { label: 'event', event: 'logout' })
+    .on('logout', (user, reason) => {
+      const name = user.name()
+      logger.info(`${bot.name()}-${name} 退出登录`, { label: 'event', event: 'logout', reason })
     })
     .on('stop', () => {
       const name = bot.currentUser.name()
