@@ -1,14 +1,16 @@
 import { Message } from 'wechaty'
 import { Message as MessageType } from 'wechaty-puppet/types'
+import { Contact as ContactType } from 'wechaty-puppet/types'
 import { routes } from '../message'
 import { logger } from '../lib/logger'
 
 // 默认只回复私聊，以及艾特我的群聊
 async function defaultFilter(msg: Message) {
   const metionSelf = await msg.mentionSelf()
+  // 屏蔽微信运动、公众号消息等
   return (
     msg.type() === MessageType.Text &&
-    (!msg.room() || (msg.room() && metionSelf))
+    (!msg.room() || (msg.room() && metionSelf)) && msg.talker().type() !== ContactType.Official
   )
 }
 

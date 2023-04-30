@@ -71,11 +71,10 @@ if (require.main === module) {
       logger.info(`${bot.name()}-${name} 退出登录`, { label: 'event', event: 'logout', reason })
     })
     .on('stop', () => {
-      const name = bot.currentUser.name()
-      logger.info(`${bot.name()}-${name} 退出`, { label: 'event', event: 'stop' })
+      logger.info(`${bot.name()}-${bot.isLoggedIn ? bot.currentUser.name() : '未登录用户'} 退出`, { label: 'event', event: 'stop' })
     })
     .on('error', (error) => {
-      logger.error('WechatyError', error)
+      logger.error('WechatyError', error.code, error.name)
       console.error(error)
       Sentry.captureException(error)
     })
@@ -90,4 +89,10 @@ if (require.main === module) {
     logger.error('UN_HANDLED_REJECTION', e)
     Sentry.captureException(e)
   })
+
+  // // 真正的退出登录，手机微信上方横条消失，触发 logout 事件
+  // bot.logout()
+
+  // // 停止机器人运行，手机微信上方横条不会消失，触发 stop 事件，如果此时是登录状态，触发 logout 事件
+  // bot.stop()
 }
