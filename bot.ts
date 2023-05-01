@@ -74,8 +74,7 @@ if (require.main === module) {
       logger.info(`${bot.name()}-${bot.isLoggedIn ? bot.currentUser.name() : '未登录用户'} 退出`, { label: 'event', event: 'stop' })
     })
     .on('error', (error) => {
-      logger.error('WechatyError', error.code, error.name)
-      console.error(error)
+      logger.error(error)
       Sentry.captureException(error)
     })
     .start()
