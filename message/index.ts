@@ -2,7 +2,6 @@ import { Message, Sayable } from 'wechaty'
 import config from '../config'
 import { reply } from '../lib/reply'
 import * as echo from './echo'
-import * as fund from './fund'
 import { cache } from '../lib/cache'
 
 type Route = {
@@ -18,7 +17,6 @@ export const routes: Route[] = [
       return 'pong'
     },
   },
-  { keyword: '基金', handle: fund.handle },
   {
     keyword: '',
     async handle(text, msg) {
