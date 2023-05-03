@@ -89,6 +89,9 @@ if (require.main === module) {
     Sentry.captureException(e)
   })
 
+  const n = (bot as any).listenerCount('scan')
+  console.log(n)
+
   // // 真正的退出登录，手机微信上方横条消失，触发 logout 事件
   // bot.logout()
 
