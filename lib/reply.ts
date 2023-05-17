@@ -32,22 +32,10 @@ const errorMessages = [
 ]
 
 export async function reply(messages: ChatMessage[]): Promise<string> {
-  const apiKey = sample(config.apiKey)
-
-  // TODO: wretch retry 中间件无法返回 40x 异常，需修复
-  const w = wretch(config.baseURL).middlewares([
-    // retry({
-    //   delayTimer: 500,
-    //   maxAttempts: 3,
-    //   until (response, error) {
-    //     return response && response.ok
-    //   }
-    // })
-  ])
-  const getReply = () => w
+  const getReply = () => wretch(config.baseURL)
     .url('/v1/chat/completions')
     .headers({
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${sample(config.apiKey)}`,
       'Content-Type': 'application/json'
     })
     .post({
