@@ -5,6 +5,7 @@ import { retry } from 'wretch/middlewares/retry'
 import { retry as pRetry } from '@shanyue/promise-utils'
 import * as Sentry from '@sentry/node'
 import { logger } from './logger'
+import { cache } from './cache'
 
 type ChatMessage = {
   role: 'system' | 'user' | 'assistant'
@@ -55,4 +56,32 @@ export async function reply(messages: ChatMessage[]): Promise<string> {
       // return '抱歉，我发生了一点小意外。'
       return sample(errorMessages)
     })
+}
+
+export async function chat(content: string, prompt: string, key: string): Promise<string> {
+  const history: any = cache.get(key) || []
+  const system = prompt ? [{
+    content: prompt,
+    role: 'system'
+  }] : []
+  const answer = await reply([
+    ...system,
+    ...history,
+    {
+      role: 'user',
+      content
+    },
+  ])
+  cache.set(key, [
+    ...history.slice(-2),
+    {
+      role: 'user',
+      content,
+    },
+    {
+      role: 'assistant',
+      content: answer
+    }
+  ])
+  return answer
 }

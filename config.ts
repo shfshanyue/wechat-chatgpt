@@ -36,7 +36,8 @@ export default {
   // enablePrivate: /(山月)/,
 
   groupPrefix: '',
-  privatePrefix: '山月',
+  // privatePrefix: '山月',
+  privatePrefix: '',
 
   // 开启异常报错上传 sentry
   sentryDsn: process.env.SENTRY_DSN || ''

@@ -1,6 +1,6 @@
 import { Message, Sayable } from 'wechaty'
 import config from '../config'
-import { reply } from '../lib/reply'
+import { chat, reply } from '../lib/reply'
 import * as echo from './echo'
 import { cache } from '../lib/cache'
 
@@ -18,32 +18,37 @@ export const routes: Route[] = [
     },
   },
   {
+    keyword: '收到红包，请在手机上查看',
+    handle () {
+      // 后续在这里给发红包的人加次数
+      return ''
+    },
+    filter () {
+      return false
+    }
+  },
+  {
+    keyword: '[收到一条微信转账消息，请在手机上查看]',
+    handle() {
+      return ''
+    },
+    filter () {
+      return false
+    }
+  },
+  {
     keyword: '',
     async handle(text, msg) {
       text = text
         .replace(new RegExp(`^${config.groupPrefix}`), '')
         .replace(new RegExp(`^${config.privatePrefix}`), '')
       const talker = msg.talker()
+
       const conversation = msg.conversation()
-      const key = `Conversation:${conversation.id}:Message`
-      const history: any = cache.get(key) || []
-      const answer = await reply([
-        ...history,
-        {
-          role: 'user',
-          content: `${config.prompt}${text}`,
-        },
-      ])
-      cache.set(key, [
-        {
-          role: 'user',
-          content: `${config.prompt}${text}`
-        },
-        {
-          role: 'assistant',
-          content: answer
-        }
-      ])
+
+      const key = `Conversation:${conversation.id}:Talker:${talker.id}:Message`
+      const answer = await chat(text, config.prompt, key)
+
       if (msg.room()) {
         const isLontText = text.length > 20
         return `@${talker.name()}  ${text.slice(0, 20)}${isLontText ? '...' : ''}
@@ -52,7 +57,7 @@ ${answer}`
       }
       return answer
     },
-    async filter (msg) {
+    async filter(msg) {
       const room = msg.room()
       if (room && config.enableGroup && msg.text().startsWith(config.groupPrefix)) {
         if (config.enableGroup === true) {
