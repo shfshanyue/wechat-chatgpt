@@ -1,8 +1,7 @@
 import { Message, Sayable } from 'wechaty'
 import config from '../config'
-import { chat, reply } from '../lib/reply'
-import * as echo from './echo'
-import { cache } from '../lib/cache'
+import { chat, draw } from '../lib/reply'
+import { FileBox } from 'file-box'
 
 type Route = {
   handle: ((text: string, msg: Message) => Sayable) | ((text: string, msg: Message) => Promise<Sayable>)
@@ -19,11 +18,11 @@ export const routes: Route[] = [
   },
   {
     keyword: '收到红包，请在手机上查看',
-    handle () {
+    handle() {
       // 后续在这里给发红包的人加次数
       return ''
     },
-    filter () {
+    filter() {
       return false
     }
   },
@@ -32,8 +31,19 @@ export const routes: Route[] = [
     handle() {
       return ''
     },
-    filter () {
+    filter() {
       return false
+    }
+  },
+  {
+    keyword: /^画/,
+    async handle(text, msg) {
+      text = text
+        .replace(/^画/, '')
+      await msg.say('🤖 正在绘制中，请稍后...')
+      const url = await draw(text)
+      const fileBox = FileBox.fromUrl(url)
+      return fileBox
     }
   },
   {

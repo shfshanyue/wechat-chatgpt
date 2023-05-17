@@ -6,6 +6,8 @@ import { retry as pRetry } from '@shanyue/promise-utils'
 import * as Sentry from '@sentry/node'
 import { logger } from './logger'
 import { cache } from './cache'
+import { Configuration, CreateImageRequestResponseFormatEnum, CreateImageRequestSizeEnum, OpenAIApi } from 'openai'
+import { createOpenAI } from './openai'
 
 type ChatMessage = {
   role: 'system' | 'user' | 'assistant'
@@ -56,6 +58,24 @@ export async function reply(messages: ChatMessage[]): Promise<string> {
       // return '抱歉，我发生了一点小意外。'
       return sample(errorMessages)
     })
+}
+
+export async function draw(prompt: string) {
+  const openai = createOpenAI()
+
+  const response = await openai.createImage({
+    prompt: prompt,
+    size: CreateImageRequestSizeEnum._512x512,
+    response_format: CreateImageRequestResponseFormatEnum.Url,
+  }).then((res) => res.data)
+    .catch((err) => {
+      console.error(err)
+    });
+  if (response) {
+    return response.data[0].url
+  } else {
+    return '绘制图片失败，请您再试'
+  }
 }
 
 export async function chat(content: string, prompt: string, key: string): Promise<string> {
