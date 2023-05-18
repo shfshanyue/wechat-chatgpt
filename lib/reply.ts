@@ -8,6 +8,7 @@ import { logger } from './logger'
 import { cache } from './cache'
 import { Configuration, CreateImageRequestResponseFormatEnum, CreateImageRequestSizeEnum, OpenAIApi } from 'openai'
 import { createOpenAI } from './openai'
+import { mjClient } from './mj'
 
 type ChatMessage = {
   role: 'system' | 'user' | 'assistant'
@@ -74,6 +75,16 @@ export async function draw(prompt: string) {
   if (response) {
     return response.data[0].url
   } else {
+    return '绘制图片失败，请您再试'
+  }
+}
+
+export async function drawWithMJ(prompt: string) {
+  try {
+    const { id, uri, content, ...args } = await mjClient.Imagine(prompt)
+    return uri
+  } catch (e) {
+    console.error(e)
     return '绘制图片失败，请您再试'
   }
 }

@@ -1,6 +1,6 @@
 import { Message, Sayable } from 'wechaty'
 import config from '../config'
-import { chat, draw } from '../lib/reply'
+import { chat, draw, drawWithMJ } from '../lib/reply'
 import { FileBox } from 'file-box'
 
 type Route = {
@@ -41,7 +41,8 @@ export const routes: Route[] = [
       text = text
         .replace(/^画/, '')
       await msg.say('🤖 正在绘制中，请稍后...')
-      const url = await draw(text)
+      // const url = await draw(text)
+      const url = await drawWithMJ(text)
       const fileBox = FileBox.fromUrl(url)
       return fileBox
     }
