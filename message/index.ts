@@ -1,7 +1,11 @@
 import { Message, Sayable } from 'wechaty'
+import { FileBox } from 'file-box'
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+
 import config from '../config'
 import { chat, draw, drawWithMJ } from '../lib/reply'
-import { FileBox } from 'file-box'
+import { pickBy, pick } from 'midash'
 
 type Route = {
   handle: ((text: string, msg: Message) => Sayable) | ((text: string, msg: Message) => Promise<Sayable>)
@@ -66,6 +70,25 @@ export const routes: Route[] = [
 ---------------------------------
 ${answer}`
       }
+      // prisma.message.create({
+      //   data: {
+      //     text,
+      //     reply: answer,
+      //     contactName: talker.name(),
+      //     contact: {
+      //       connectOrCreate: {
+      //         create: {
+      //           wechatId: talker.id,
+      //           name: talker.name(),
+      //           ...pick(talker.payload, ['alias', 'avatar', 'gender', 'friend', 'weixin'])
+      //         },
+      //         where: {
+      //           wechatId: talker.id,
+      //         }
+      //       }
+      //     }
+      //   }
+      // })
       return answer
     },
     async filter(msg) {

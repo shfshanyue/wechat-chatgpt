@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Contact {
+  id       Int       @id @default(autoincrement())
+  wechatId String    @unique()
+  name     String
+  alias    String?    @default("")
+  avatar   String?    @default("")
+  friend   Boolean   @default(true)
+  gender   Int
+  weixin   String?
+  messages Message[]
+}
+
+model Bot {
+  id            Int       @id @default(autoincrement())
+  name          String?
+  enableGroup   Boolean   @default(true)
+  enablePrivate Boolean   @default(true)
+  groupPrefix   String    @default("")
+  privatePrefix String    @default("")
+  prompt        String    @default("")
+  acceptText    String    @default("")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  messages      Message[]
+}
+
+model Message {
+  id          Int      @id @default(autoincrement())
+  text        String
+  contact     Contact? @relation(fields: [contactId], references: [wechatId])
+  contactId   String
+  contactName String
+  reply       String
+  model       String?  @default("gpt-3.5-turbo")
+  raw         String?  @default("")
+  token       Int?     @default(0)
+  bot         Bot      @relation(fields: [botId], references: [id])
+  botId       Int
+}
