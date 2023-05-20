@@ -6,6 +6,8 @@ const prisma = new PrismaClient()
 import config from '../config'
 import { chat, draw, drawWithMJ } from '../lib/reply'
 import { pickBy, pick } from 'midash'
+import { throttle } from 'lodash'
+import { uploadOSS } from '../lib/upload'
 
 type Route = {
   handle: ((text: string, msg: Message) => Sayable) | ((text: string, msg: Message) => Promise<Sayable>)
@@ -46,8 +48,19 @@ export const routes: Route[] = [
         .replace(/^画/, '')
       await msg.say('🤖 正在绘制中，请稍后...')
       // const url = await draw(text)
-      const url = await drawWithMJ(text)
-      const fileBox = FileBox.fromUrl(url)
+      const uri = await drawWithMJ(text, throttle((uri, progress) => {
+        // msg.say(`🤖 正在绘制中，完成进度 ${progress}`).catch(() => {})
+      }, 60000))
+      const url = await uploadOSS(uri)
+      const prefix = msg.room() ? `@${msg.talker().name()} ` : ''
+      await msg.say(`${prefix}🤖 绘制完成
+
+提示词：${text}
+图像高清地址：${uri}
+国内高清地址：${url}
+`)
+      const resizeUrl = `${url}?x-oss-process=image/resize,w_900/format,webp`
+      const fileBox = FileBox.fromUrl(resizeUrl)
       return fileBox
     }
   },

@@ -5,4 +5,5 @@ export const mjClient = new Midjourney({
   ChannelId: <string>process.env.MJ_CHANNEL_ID,
   SalaiToken: <string>process.env.MJ_SALAI_TOKEN,
   Debug: true,
+  Ws: true
 })

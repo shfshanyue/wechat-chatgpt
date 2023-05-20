@@ -9,6 +9,8 @@ import { cache } from './cache'
 import { Configuration, CreateImageRequestResponseFormatEnum, CreateImageRequestSizeEnum, OpenAIApi } from 'openai'
 import { createOpenAI } from './openai'
 import { mjClient } from './mj'
+import { LoadingHandler } from 'midjourney'
+import { uploadOSS } from './upload'
 
 type ChatMessage = {
   role: 'system' | 'user' | 'assistant'
@@ -79,18 +81,27 @@ export async function draw(prompt: string) {
   }
 }
 
-export async function drawWithMJ(prompt: string) {
+export async function drawWithMJ(prompt: string, cb: LoadingHandler) {
   try {
-    const { id, uri, content, ...args } = await mjClient.Imagine(prompt)
-    return uri
+    if (/[\u4e00-\u9fa5]/.test(prompt)) {
+      prompt = await chat(prompt, '以下文本如果是中文，则翻译为英文：')
+    }
+    if (!prompt.includes('--quality') && !prompt.includes('--q')) {
+      prompt = `${prompt} --quality .75`
+    }
+    const getURI = async () => {
+      const { id, uri, content, ...args } = await mjClient.Imagine(prompt, cb)
+      return uri
+    }
+    return pRetry(getURI, { times: 3 })
   } catch (e) {
     console.error(e)
     return '绘制图片失败，请您再试'
   }
 }
 
-export async function chat(content: string, prompt: string, key: string): Promise<string> {
-  const history: any = cache.get(key) || []
+export async function chat(content: string, prompt: string, key?: string): Promise<string> {
+  const history: any = (key && cache.get(key)) || []
   const system = prompt ? [{
     content: prompt,
     role: 'system'
