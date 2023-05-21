@@ -8,6 +8,7 @@ import { chat, draw, drawWithMJ } from '../lib/reply'
 import { pickBy, pick } from 'midash'
 import { throttle } from 'lodash'
 import { uploadOSS } from '../lib/upload'
+import { logger } from '../lib/logger'
 
 type Route = {
   handle: ((text: string, msg: Message) => Sayable) | ((text: string, msg: Message) => Promise<Sayable>)
@@ -48,9 +49,16 @@ export const routes: Route[] = [
         .replace(/^画/, '')
       await msg.say('🤖 正在绘制中，请稍后...')
       // const url = await draw(text)
-      const uri = await drawWithMJ(text, throttle((uri, progress) => {
-        // msg.say(`🤖 正在绘制中，完成进度 ${progress}`).catch(() => {})
-      }, 60000))
+      let uri
+      try {
+        uri = await drawWithMJ(text, throttle((uri, progress) => {
+          // msg.say(`🤖 正在绘制中，完成进度 ${progress}`).catch(() => {})
+        }, 60000))
+      } catch (e) {
+        logger.error(e)
+        // TODO: 写一个方法，以 room 为参数
+        return '抱歉，绘画失败，有可能你所绘制的内容违规'
+      }
       const url = await uploadOSS(uri)
       const prefix = msg.room() ? `@${msg.talker().name()} ` : ''
       await msg.say(`${prefix}🤖 绘制完成

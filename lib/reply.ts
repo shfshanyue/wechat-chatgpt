@@ -82,22 +82,19 @@ export async function draw(prompt: string) {
 }
 
 export async function drawWithMJ(prompt: string, cb: LoadingHandler) {
-  try {
-    if (/[\u4e00-\u9fa5]/.test(prompt)) {
-      prompt = await chat(prompt, '中译英，直接翻译，无需解释')
-    }
-    if (!prompt.includes('--quality') && !prompt.includes('--q')) {
-      prompt = `${prompt} --quality .75`
-    }
-    const getURI = async () => {
-      const { id, uri, content, ...args } = await mjClient.Imagine(prompt, cb)
-      return uri
-    }
-    return pRetry(getURI, { times: 3 })
-  } catch (e) {
-    console.error(e)
-    return '绘制图片失败，请您再试'
+  if (/[\u4e00-\u9fa5]/.test(prompt)) {
+    prompt = await chat(prompt, '中译英，直接翻译，无需解释')
   }
+  if (!prompt.includes('--quality') && !prompt.includes('--q')) {
+    prompt = `${prompt} --quality .75`
+  }
+  const getURI = async () => {
+    const data = await mjClient.Imagine(prompt, cb)
+    console.log(data)
+    const { id, uri, content, ...args } = data
+    return uri
+  }
+  return pRetry(getURI, { times: 3 })
 }
 
 export async function chat(content: string, prompt: string, key?: string): Promise<string> {

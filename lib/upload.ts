@@ -18,12 +18,15 @@ export async function uploadOSS(urlToUpload: string) {
     bucket: process.env.OSS_BUCKET
   })
 
+  // 在微信网页版上，无法传 webp 格式图片，将其以 .webp 后缀结尾
+  const format = process.env.WECHATY_PUPPET === 'wechaty-puppet-wechat' && urlToUpload.endsWith('webp') ? '.png' : ''
+
   // 获取文件名
   const fileName = [
     'midjourney',
     dayjs().format('YYYYMMDD'),
-    path.basename(url.parse(urlToUpload).pathname)
-  ].join('/')
+    path.basename(url.parse(urlToUpload).pathname),
+  ].join('/') + format
 
   // 根据URL下载文件内容
   const {
@@ -36,7 +39,8 @@ export async function uploadOSS(urlToUpload: string) {
   const { name, res: result } = await client.putStream(fileName, body, {
     timeout: 180000,
     headers: {
-      'Cache-Control': 'max-age=31536000'
+      'Cache-Control': 'max-age=31536000',
+      'Content-Type': headers['content-type']
     }
   } as any)
 
@@ -44,7 +48,7 @@ export async function uploadOSS(urlToUpload: string) {
   return `https://static.prochat.tech/${name}`
 }
 
-// uploadOSS('https://static.shanyue.tech/images/23-05-16/clipboard-7590.dd2989.webp')
+// uploadOSS('https://cdn.discordapp.com/attachments/1108997745064292384/1109841226104057886/dx_Western_Dragon._2c11f9b1-6e1a-4e79-b559-a6a4544aaa7f.webp')
 //   .then(o => {
 //     console.log(o)
 //   })
