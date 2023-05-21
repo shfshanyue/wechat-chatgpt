@@ -59,7 +59,9 @@ export const routes: Route[] = [
 图像高清地址：${uri}
 国内高清地址：${url}
 `)
-      const resizeUrl = `${url}?x-oss-process=image/resize,w_900/format,webp`
+      // TODO: 个人微信 web 协议不支持 webp
+      const webp = process.env.WECHATY_PUPPET === 'wechaty-puppet-wechat' ? '/format,png' : '/format,webp'
+      const resizeUrl = `${url}?x-oss-process=image/resize,w_900${webp}`
       const fileBox = FileBox.fromUrl(resizeUrl)
       return fileBox
     }

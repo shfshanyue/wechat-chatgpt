@@ -84,7 +84,7 @@ export async function draw(prompt: string) {
 export async function drawWithMJ(prompt: string, cb: LoadingHandler) {
   try {
     if (/[\u4e00-\u9fa5]/.test(prompt)) {
-      prompt = await chat(prompt, '以下文本如果是中文，则翻译为英文：')
+      prompt = await chat(prompt, '中译英，直接翻译，无需解释')
     }
     if (!prompt.includes('--quality') && !prompt.includes('--q')) {
       prompt = `${prompt} --quality .75`
