@@ -8,5 +8,6 @@ WORKDIR /code
 COPY package.json pnpm-lock.yaml /code/
 RUN pnpm i
 COPY . /code
+RUN npx prisma generate
 
 CMD npm start
