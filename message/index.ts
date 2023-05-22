@@ -68,8 +68,9 @@ export const routes: Route[] = [
 国内高清地址：${url}
 `)
       // TODO: 个人微信 web 协议不支持 webp
-      const webp = process.env.WECHATY_PUPPET === 'wechaty-puppet-wechat' ? '/format,png' : '/format,webp'
-      const resizeUrl = `${url}?x-oss-process=image/resize,w_900${webp}`
+      const png = uri.endsWith('.webp') ? '/format,png' : ''
+      const resizeUrl = `${url}?x-oss-process=image/resize,w_900${png}`
+      // const testUrl = 'https://static.prochat.tech/midjourney/20230522/dx_Landscape_painting_79ad6f87-c2be-48a6-afc5-8cc075a732ae.webp.png?x-oss-process=image/resize,w_900/format,png'
       const fileBox = FileBox.fromUrl(resizeUrl)
       return fileBox
     }

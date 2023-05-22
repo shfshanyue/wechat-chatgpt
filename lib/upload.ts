@@ -18,8 +18,8 @@ export async function uploadOSS(urlToUpload: string) {
     bucket: process.env.OSS_BUCKET
   })
 
-  // 在微信网页版上，无法传 webp 格式图片，将其以 .webp 后缀结尾
-  const format = process.env.WECHATY_PUPPET === 'wechaty-puppet-wechat' && urlToUpload.endsWith('webp') ? '.png' : ''
+  // 微信无法识别 webp 格式图片，将其以 .webp 后缀结尾改为 .webp.png
+  const format = urlToUpload.endsWith('webp') ? '.png' : ''
 
   // 获取文件名
   const fileName = [
