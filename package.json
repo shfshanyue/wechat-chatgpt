@@ -28,6 +28,7 @@
     "@types/lodash": "^4.14.191",
     "@types/node": "^20.2.3",
     "ali-oss": "^6.17.1",
+    "auto-changelog": "^2.4.0",
     "cron": "^2.3.0",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
