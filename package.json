@@ -9,9 +9,13 @@
     "ncu": "ncu",
     "dev": "nodemon bot.ts"
   },
+  "npm": {
+    "publish": false
+  },
   "engines": {
     "node": ">= 18"
   },
+  "private": true,
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -42,6 +46,7 @@
     "p-map": "^5.5.0",
     "prisma": "^4.14.1",
     "qrcode-terminal": "^0.12.0",
+    "release-it": "^15.10.3",
     "tsx": "^3.12.6",
     "typescript": "^5.0.4",
     "undici": "^5.22.1",
