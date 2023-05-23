@@ -16,8 +16,9 @@ Sentry.init({
 })
 
 export function createBot() {
+  const botName = process.env.BOT_NAME || 'wechat-shanyue'
   return WechatyBuilder.build({
-    name: 'memory/wechat-shanyue',
+    name: `memory/${botName}`,
     puppetOptions: {
       uos: true, // 开启uos协议
       timeoutSeconds: 4 * 60,
