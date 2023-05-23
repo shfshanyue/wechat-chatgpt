@@ -90,11 +90,10 @@ export async function drawWithMJ(prompt: string, cb: LoadingHandler) {
   }
   const getURI = async () => {
     const data = await mjClient.Imagine(prompt, cb)
-    console.log(data)
     const { id, uri, content, ...args } = data
     return uri
   }
-  return pRetry(getURI, { times: 3 })
+  return pRetry(getURI, { times: 1 })
 }
 
 export async function chat(content: string, prompt: string, key?: string): Promise<string> {

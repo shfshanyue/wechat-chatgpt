@@ -10,3 +10,10 @@ services:
       - ./logs:/code/logs
       - ./memory:/code/memory
     restart: always
+  redis:
+    image: redis:7-alpine
+    restart: always
+    volumes:
+      - ./data:/data
+    ports:
+      - "6379:6379"
