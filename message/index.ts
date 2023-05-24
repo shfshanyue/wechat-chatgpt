@@ -9,9 +9,10 @@ import { pickBy, pick } from 'midash'
 import { throttle } from 'lodash'
 import { uploadOSS } from '../lib/upload'
 import { logger } from '../lib/logger'
-// import { redis } from '../lib/redis'
+import { redis } from '../lib/redis'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { mjClient } from '../lib/mj'
 
 dayjs.extend(utc)
 
@@ -48,6 +49,28 @@ export const routes: Route[] = [
     }
   },
   {
+    keyword: /^\/up /,
+    async handle(text, msg) {
+      const [id, up] = text.replace(/^up /, '').split(' ')
+      const key = `MidJourney:${id}`
+      const data = await redis.get(key)
+      if (!data) {
+        return '请您再试'
+      }
+      const { content, hash } = JSON.parse(data)
+      const index = Number(up[1])
+      const upscale = up[0]
+      const { uri } = upscale.toUpperCase() === 'U' ? await mjClient.Upscale(content, index, id, hash) : await mjClient.Variation(content, index, id, hash)
+      const url = await uploadOSS(uri)
+      // TODO: 个人微信 web 协议不支持 webp
+      const png = uri.endsWith('.webp') ? '/format,png' : ''
+      const resizeUrl = `${url}?x-oss-process=image/resize,w_900${png}`
+      // const testUrl = 'https://static.prochat.tech/midjourney/20230522/dx_Landscape_painting_79ad6f87-c2be-48a6-afc5-8cc075a732ae.webp.png?x-oss-process=image/resize,w_900/format,png'
+      const fileBox = FileBox.fromUrl(resizeUrl)
+      return fileBox
+    }
+  },
+  {
     keyword: /^画/,
     async handle(text, msg) {
       text = text
@@ -71,9 +94,11 @@ export const routes: Route[] = [
       // const url = await draw(text)
       let uri
       try {
-        uri = await drawWithMJ(text, throttle((uri, progress) => {
+        const data = await drawWithMJ(text, throttle((uri, progress) => {
           // msg.say(`🤖 正在绘制中，完成进度 ${progress}`).catch(() => {})
         }, 60000))
+        await redis.set(`MidJourney:${data.id || Math.random()}`, JSON.stringify(data))
+        uri = data.uri
       } catch (e) {
         logger.error(e)
         // await redis.incr(key)

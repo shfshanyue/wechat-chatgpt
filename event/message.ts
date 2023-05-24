@@ -28,7 +28,7 @@ export async function handleMessage(msg: Message) {
   if (!enable) {
     return
   }
-
+  console.log(msg.room(), msg.talker().name(), msg.text())
   const text = await msg.mentionText()
   const route = routes.find((route) => {
     const keyword = route.keyword

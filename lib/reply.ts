@@ -88,12 +88,10 @@ export async function drawWithMJ(prompt: string, cb: LoadingHandler) {
   if (!prompt.includes('--quality') && !prompt.includes('--q')) {
     prompt = `${prompt} --quality .75`
   }
-  const getURI = async () => {
-    const data = await mjClient.Imagine(prompt, cb)
-    const { id, uri, content, ...args } = data
-    return uri
-  }
-  return pRetry(getURI, { times: 1 })
+  await mjClient.init()
+  const data = await mjClient.Imagine(prompt, cb)
+  console.log(data)
+  return data
 }
 
 export async function chat(content: string, prompt: string, key?: string): Promise<string> {

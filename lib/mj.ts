@@ -7,3 +7,5 @@ export const mjClient = new Midjourney({
   Debug: process.env.NODE_ENV === 'development',
   Ws: true
 })
+
+mjClient.init()
