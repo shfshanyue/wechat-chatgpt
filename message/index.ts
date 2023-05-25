@@ -120,10 +120,9 @@ export const routes: Route[] = [
 图像高清地址：${uri}
 国内高清地址：${url}
 `)
-      await msg.say(`使用 /up 进行图像放大与变化，示例：
+      await msg.say(`使用 /up 命令进行图像放大与变化，放大第二张示例如下：
 
-/up ${id} U1
-/up ${id} V1`)
+/up ${id} U2`)
       // TODO: 个人微信 web 协议不支持 webp
       const png = uri.endsWith('.webp') ? '/format,png' : ''
       const resizeUrl = `${url}?x-oss-process=image/resize,w_900${png}`
