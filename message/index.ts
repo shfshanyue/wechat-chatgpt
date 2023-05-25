@@ -22,6 +22,15 @@ type Route = {
   filter?: (msg: Message) => boolean | Promise<boolean>
 }
 
+function sayFrom ({
+  msg,
+  mention,
+  quote,
+  text
+}): string {
+  return ''
+}
+
 export const routes: Route[] = [
   {
     keyword: '/ping',
@@ -51,21 +60,19 @@ export const routes: Route[] = [
   {
     keyword: /^\/up /,
     async handle(text, msg) {
-      const [id, up] = text.replace(/^up /, '').split(' ')
+      const [id, up] = text.replace(/^\/up /, '').split(' ')
       const key = `MidJourney:${id}`
       const data = await redis.get(key)
       if (!data) {
-        return '请您再试'
+        return '该画作已过期或不存在，请您确认 ID 是否拼写正确'
       }
       const { content, hash } = JSON.parse(data)
       const index = Number(up[1])
       const upscale = up[0]
       const { uri } = upscale.toUpperCase() === 'U' ? await mjClient.Upscale(content, index, id, hash) : await mjClient.Variation(content, index, id, hash)
       const url = await uploadOSS(uri)
-      // TODO: 个人微信 web 协议不支持 webp
       const png = uri.endsWith('.webp') ? '/format,png' : ''
       const resizeUrl = `${url}?x-oss-process=image/resize,w_900${png}`
-      // const testUrl = 'https://static.prochat.tech/midjourney/20230522/dx_Landscape_painting_79ad6f87-c2be-48a6-afc5-8cc075a732ae.webp.png?x-oss-process=image/resize,w_900/format,png'
       const fileBox = FileBox.fromUrl(resizeUrl)
       return fileBox
     }
@@ -92,19 +99,19 @@ export const routes: Route[] = [
 
       await msg.say('🤖 正在绘制中，请稍后...')
       // const url = await draw(text)
-      let uri
+      let mjMessage
       try {
-        const data = await drawWithMJ(text, throttle((uri, progress) => {
+        mjMessage = await drawWithMJ(text, throttle((uri, progress) => {
           // msg.say(`🤖 正在绘制中，完成进度 ${progress}`).catch(() => {})
         }, 60000))
-        await redis.set(`MidJourney:${data.id || Math.random()}`, JSON.stringify(data))
-        uri = data.uri
+        await redis.set(`MidJourney:${mjMessage.id || Math.random()}`, JSON.stringify(mjMessage), 'EX', 3600 * 24 * 3)
       } catch (e) {
         logger.error(e)
         // await redis.incr(key)
         // TODO: 写一个方法，以 room 为参数
         return '抱歉，绘画失败，有可能你所绘制的内容违规'
       }
+      const { uri, id } = mjMessage
       const url = await uploadOSS(uri)
       const prefix = msg.room() ? `@${msg.talker().name()} ` : ''
       await msg.say(`${prefix}🤖 绘制完成
@@ -113,6 +120,10 @@ export const routes: Route[] = [
 图像高清地址：${uri}
 国内高清地址：${url}
 `)
+      await msg.say(`使用 /up 进行图像放大与变化，示例：
+
+/up ${id} U1
+/up ${id} V1`)
       // TODO: 个人微信 web 协议不支持 webp
       const png = uri.endsWith('.webp') ? '/format,png' : ''
       const resizeUrl = `${url}?x-oss-process=image/resize,w_900${png}`
