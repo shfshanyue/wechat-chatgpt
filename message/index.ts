@@ -78,10 +78,12 @@ export const routes: Route[] = [
     }
   },
   {
-    keyword: /^画/,
+    keyword: /^(画|\/imagine )/,
     async handle(text, msg) {
       text = text
+        .replace(/^画图：?/, '')
         .replace(/^画/, '')
+        .replace(/^imagine /, '')
       
       // // TODO: 拥有很严重的竟态问题
       // const DEFAULT_FREE_CREDIT = Number(process.env.DEFAULT_FREE_CREDIT) || 100

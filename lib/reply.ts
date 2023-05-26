@@ -86,11 +86,10 @@ export async function drawWithMJ(prompt: string, cb: LoadingHandler) {
   if (/[\u4e00-\u9fa5]/.test(text)) {
     text = await chat(text, '中译英，直接翻译，无需解释')
   }
-  prompt = [text, ...args].join('--')
+  prompt = [text, ...args].join(' --')
   // if (!prompt.includes('--quality') && !prompt.includes('--q')) {
   //   prompt = `${prompt} --quality .75`
   // }
-  await mjClient.init()
   const data = await mjClient.Imagine(prompt, cb)
   console.log(data)
   return data
