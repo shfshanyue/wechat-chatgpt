@@ -49,12 +49,14 @@ export const routes: Route[] = [
     }
   },
   {
-    keyword: '[收到一条微信转账消息，请在手机上查看]',
-    handle() {
-      return ''
+    keyword: /\[(收到一条微信转账消息，请在手机上查看|收到红包，请在手机上查看|Received a micro-message transfer message, please view on the phone)\]/,
+    async handle(text, msg) {
+      const key = `Contact:${msg.talker().id}:Credit:${dayjs().utcOffset(4).format('YYYYMMDD')}`
+      await redis.incrby(key, 10) 
+      return '您已获得十次提问机会，可继续提问'
     },
     filter() {
-      return false
+      return true
     }
   },
   {
@@ -85,19 +87,19 @@ export const routes: Route[] = [
         .replace(/^画/, '')
         .replace(/^imagine /, '')
       
-      // // TODO: 拥有很严重的竟态问题
-      // const DEFAULT_FREE_CREDIT = Number(process.env.DEFAULT_FREE_CREDIT) || 100
-      // // 凌晨四点重置
-      // const key = `Contact:${msg.talker().id}:Credit:${dayjs().utcOffset(4).format('YYYYMMDD')}`
-      // const credit = await redis.get(key).then(v => {
-      //   return v ? Number(v) : DEFAULT_FREE_CREDIT
-      // }).catch(() => {
-      //   return DEFAULT_FREE_CREDIT
-      // })
-      // if (credit <= 0) {
-      //   return '您今日余额已不足，请明日再来。发送红包自动获得 10 次绘制次数。'
-      // }
-      // await redis.set(key, credit - 1, 'EX', 3600 * 24)
+      // TODO: 拥有很严重的竟态问题
+      const DEFAULT_FREE_CREDIT = Number(process.env.DEFAULT_FREE_CREDIT) || 100
+      // 凌晨四点重置
+      const key = `Contact:${msg.talker().id}:Credit:${dayjs().utcOffset(4).format('YYYYMMDD')}`
+      const credit = await redis.get(key).then(v => {
+        return v ? Number(v) : DEFAULT_FREE_CREDIT
+      }).catch(() => {
+        return DEFAULT_FREE_CREDIT
+      })
+      if (credit <= 0) {
+        return '您今日余额已不足，请明日再来。发送红包自动获得 3 次绘制次数。'
+      }
+      await redis.set(key, credit - 3, 'EX', 3600 * 24)
 
       await msg.say('🤖 正在绘制中，请稍后...')
       // const url = await draw(text)
@@ -109,7 +111,7 @@ export const routes: Route[] = [
         await redis.set(`MidJourney:${mjMessage.id || Math.random()}`, JSON.stringify(mjMessage), 'EX', 3600 * 24 * 3)
       } catch (e) {
         logger.error(e)
-        // await redis.incr(key)
+        await redis.incrby(key, 3)
         // TODO: 写一个方法，以 room 为参数
         return '抱歉，绘画失败，有可能你所绘制的内容违规'
       }
@@ -140,8 +142,21 @@ export const routes: Route[] = [
         .replace(new RegExp(`^${config.groupPrefix}`), '')
         .replace(new RegExp(`^${config.privatePrefix}`), '')
       const talker = msg.talker()
-
       const conversation = msg.conversation()
+
+      // TODO: 拥有很严重的竟态问题
+      const DEFAULT_FREE_CREDIT = Number(process.env.DEFAULT_FREE_CREDIT) || 100
+      // 凌晨四点重置
+      const limitKey = `Contact:${msg.talker().id}:Credit:${dayjs().utcOffset(4).format('YYYYMMDD')}`
+      const credit = await redis.get(limitKey).then(v => {
+        return v ? Number(v) : DEFAULT_FREE_CREDIT
+      }).catch(() => {
+        return DEFAULT_FREE_CREDIT
+      })
+      if (credit <= 0) {
+        return '您今日余额已不足，请明日再来。发送红包自动获得 10 次提问次数。'
+      }
+      await redis.set(limitKey, credit - 1, 'EX', 3600 * 24)
 
       const key = `Conversation:${conversation.id}:Talker:${talker.id}:Message`
       const answer = await chat(text, config.prompt, key)
