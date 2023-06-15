@@ -39,7 +39,7 @@
     "lru-cache": "^9.1.1",
     "memory-card": "^1.1.2",
     "midash": "^0.8.2",
-    "midjourney": "^2.2.31",
+    "midjourney": "^2.7.73",
     "nodemon": "^2.0.22",
     "npm-check-updates": "^16.8.0",
     "openai": "^3.2.1",
