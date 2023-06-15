@@ -4,8 +4,10 @@
   "description": "",
   "main": "bot.ts",
   "scripts": {
+    "start:prod": "NODE_OPTIONS='--dns-result-order=ipv4first' node dist/bot.js",
     "start": "NODE_OPTIONS='--dns-result-order=ipv4first' tsx bot.ts",
     "server": "NODE_OPTIONS='--dns-result-order=ipv4first' tsx server.ts",
+    "build": "tsc",
     "ncu": "ncu",
     "dev": "nodemon bot.ts"
   },
