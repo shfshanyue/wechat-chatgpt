@@ -164,7 +164,13 @@ $ docker compose logs --tail 100 --follow
 ### 裸机部署
 
 ``` bash
-$ pnpm start
+$ rsync -lahvz --exclude lib --exclude ./message --exclude logs --exclude node_modules --exclude .env --exclude .git . zhongyi:/root/Documents/wechat-chatgpt-prod
+```
+
+``` bash
+$ pnpm i
+$ npx prisma generate
+$ pnpm start:prod
 ```
 
 ## 商务合作与交流
