@@ -62,8 +62,8 @@ dependencies:
     specifier: ^0.8.2
     version: 0.8.2
   midjourney:
-    specifier: ^2.7.73
-    version: 2.7.73
+    specifier: ^2.7.77
+    version: 2.7.77
   nodemon:
     specifier: ^2.0.22
     version: 2.0.22
@@ -4862,8 +4862,8 @@ packages:
     engines: {node: '>=14'}
     dev: false
 
-  /midjourney@2.7.73:
-    resolution: {integrity: sha512-nDd8lK/k8KzMqhfgZcFlyk2j6czOgJo+L8an5iptbgsSLxRQzY41DL24jPQH5FmEpbc4fP7A6e/jLxufmukZTw==}
+  /midjourney@2.7.77:
+    resolution: {integrity: sha512-245bfIFuvphVEjIV7tdKzO4/dmTT+d6AP5lgaq4jPOyYYFNcmzoBy+vhraT82D3POcurrtuSiYtPKhCVuld0Cg==}
     engines: {node: '>=18'}
     dependencies:
       '@huggingface/inference': 2.5.1
