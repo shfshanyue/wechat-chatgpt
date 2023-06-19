@@ -68,10 +68,22 @@ export const routes: Route[] = [
       if (!data) {
         return '该画作已过期或不存在，请您确认 ID 是否拼写正确'
       }
-      const { content, hash } = JSON.parse(data)
-      const index = Number(up[1])
+      const { content, hash, flags } = JSON.parse(data)
+      const index = Number(up[1]) as 1 | 2 | 3 | 4
       const upscale = up[0]
-      const { uri } = upscale.toUpperCase() === 'U' ? await mjClient.Upscale(content, index, id, hash) : await mjClient.Variation(content, index, id, hash)
+      const { uri } = upscale.toUpperCase() === 'U' ? await mjClient.Upscale({
+        index,
+        content,
+        msgId: id,
+        hash,
+        flags
+      }) : await mjClient.Variation({
+        index,
+        content,
+        msgId: id,
+        hash,
+        flags
+      })
       const url = await uploadOSS(uri)
       const png = uri.endsWith('.webp') ? '/format,png' : ''
       const resizeUrl = `${url}?x-oss-process=image/resize,w_900${png}`

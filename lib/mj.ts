@@ -8,4 +8,4 @@ export const mjClient = new Midjourney({
   Ws: true
 })
 
-mjClient.init()
+mjClient.Connect()
