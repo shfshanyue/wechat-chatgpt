@@ -1,6 +1,6 @@
-# ChatGPT 微信机器人
+# ChatGPT/Midjourney 微信机器人
 
-三分钟，创建一个 ChatGPT AI 微信（企业微信）小助手。
+三分钟，创建一个 ChatGPT/Midjourney AI 微信（企业微信）小助手。
 
 + [x] 负载均衡：多个 OpenAI Token 增强其稳定性
 + [x] 场景模式：可通过 PROMPT 配置机器人为专业的翻译、面试官、医生等
@@ -14,11 +14,19 @@
 + [x] 错误重试：当 chatgpt 未回复时，尝试三次，减少 chatgpt 罢工几率
 + [x] 命名模式：支持为你的机器人命名
 + [x] 连续对话：支持上下文消息
++ [x] MidJourney：支持 MidJourney 绘制
++ [x] 次数限制：支持每天限制 N 条消息，超出次数通过红包解锁
++ [x] 自动通过：配置关键词可自动通过好友
++ [x] 客服模式：配置文档作为文档库，作为客户消息来源
++ [ ] 邀请入群：将机器人邀请入群则可以获得更多免费消息
++ [ ] 管理后台：可通过管理后台自动配置机器人
 + [ ] 管理模式：内置管理员模式，可查看每个用户的对话次数
 + [ ] 查看余额：可查看该 key 还有多少余额，仅供管理员查看
 + [ ] PDF阅读：可阅读 PDF 等文件，并根据 PDF 内容进行回答
 + [ ] URL阅读：可阅读 URL 等内容，并根据 URL 内容进行回答
 + [ ] 自动总结：转发公众号文章链接至机器人，自动总结内容
+
+功能呢截图及文档见：<https://bot.prochat.tech/wechat/feature>
 
 如果需要搭建基于 ChatGPT 的飞书、钉钉、企微内部应用、公众号机器人，可参考个人的另一项目 [feishu-chatgpt](https://github.com/shfshanyue/feishu-chatgpt)。
 
@@ -74,6 +82,22 @@ OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC"
 ``` .env
 OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC,k-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC,k-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC"
 ```
+
+| Name                | Description | Default                |
+|---------------------|-------------|------------------------|
+| OPEN_API_KEY        |             | gpt-3.5-turbo          |
+| BASE_URL            |             | null                   |
+| PROMPT              |             | null                   |
+| WECHATY_PUPPET      |             | wechaty-puppet-wechat  |
+| MJ_SALAI_TOKEN      | Midjorney 的 User Token，如何获取见 [如何获取 Midjourney 的 token](https://www.androidauthority.com/get-discord-token-3149920/)             |                        |
+| MJ_SERVER_ID       | Midjorney 的 ServerID |                        |
+| MJ_CHANNEL_ID      | Midjorney 的 ChannelID |                        |
+| DEFAULT_FREE_CREDIT | 默认每天的免费使用次数，ChatGPT 算一次，MidJourney 算十次 | 1000                       |
+| OSS_REGION= | OSS 配置，存储 MidJourney 图片 | |
+| OSS_ACCESS_KEY_ID= | OSS 配置，存储 MidJourney 图片 | |
+| OSS_ACCESS_KEY_SECRET= | OSS 配置，存储 MidJourney 图片 | |
+| OSS_BUCKET= | OSS 配置，存储 MidJourney 图片 | |
+
 
 ## 企业微信
 
@@ -132,7 +156,11 @@ OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 3. 开启一个微信机器人，使用将要作为机器人的微信扫码进行登录
 
 ``` bash
+$ apt install redis
+$ apt install ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
+
 $ pnpm i
+$ npx prisma generate
 
 $ pnpm start
 ```
@@ -167,7 +195,7 @@ $ docker compose logs --tail 100 --follow
 
 ``` bash
 $ npm run build
-$ rsync -lahvz --exclude ./lib --exclude ./message --exclude logs --exclude node_modules --exclude .env --exclude .git . zhongyi:/root/Documents/wechat-chatgpt-prod
+$ rsync -lahvz --exclude ./lib --exclude ./message --exclude logs --exclude node_modules --exclude .env --exclude .git . shanyue:/home/shanyue/Documents/wechat-chatgpt-prod
 ```
 
 在目标服务器：
