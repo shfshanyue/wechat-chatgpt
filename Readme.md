@@ -93,11 +93,21 @@ OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC,k-xxxxxxxxxxxxxxx
 | MJ_SERVER_ID       | Midjorney 的 ServerID |                        |
 | MJ_CHANNEL_ID      | Midjorney 的 ChannelID |                        |
 | DEFAULT_FREE_CREDIT | 默认每天的免费使用次数，ChatGPT 算一次，MidJourney 算十次 | 1000                       |
-| OSS_REGION= | OSS 配置，存储 MidJourney 图片 | |
+| OSS_REGION= | OSS 配置，存储 MidJourney 图片，选填 | |
 | OSS_ACCESS_KEY_ID= | OSS 配置，存储 MidJourney 图片 | |
 | OSS_ACCESS_KEY_SECRET= | OSS 配置，存储 MidJourney 图片 | |
 | OSS_BUCKET= | OSS 配置，存储 MidJourney 图片 | |
 
+## 每天次数限制配置
+
+为了避免 MidJourney 及 ChatGPT 每天耗费额度过大，可通过环境变量 `DEFAULT_FREE_CREDIT` 可配置每用户每天限制使用次数，默认为 100 次点数。
+
+默认消耗次数规则为：
+
+1. ChatGPT 提问消耗一次点数
+1. Midjourney 画图消耗五次点数
+1. Midjourney 图生图消耗五次点数
+1. Midjourney 图生文消耗三次点数
 
 ## 企业微信
 

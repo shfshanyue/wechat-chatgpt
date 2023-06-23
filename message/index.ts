@@ -83,10 +83,13 @@ export const routes: Route[] = [
         hash,
         flags
       })
-      const url = await uploadOSS(uri)
-      const png = uri.endsWith('.webp') ? '/format,png' : ''
-      const resizeUrl = `${url}?x-oss-process=image/resize,w_900${png}`
-      const fileBox = FileBox.fromUrl(resizeUrl)
+      let resizeUrl = undefined
+      if (process.env.OSS_ACCESS_KEY_SECRET) {
+        const url = await uploadOSS(uri)
+        const png = uri.endsWith('.webp') ? '/format,png' : ''
+        resizeUrl = `${url}?x-oss-process=image/resize,w_900${png}`
+      }
+      const fileBox = FileBox.fromUrl(resizeUrl || uri)
       return fileBox
     }
   },
