@@ -85,6 +85,10 @@ export async function drawWithMJ(prompt: string, cb?: LoadingHandler) {
   let [text, ...args] = prompt.split('--')
   if (/[\u4e00-\u9fa5]/.test(text)) {
     text = await chat(text, '中译英，直接翻译，无需解释')
+    // 避免翻译出现中文，以防止 mj 瞎画，当 chatgpt 超过限流策略时，将会翻译失败
+    if (/[\u4e00-\u9fa5]/.test(text)) {
+      throw new Error('翻译失败')
+    }
   }
   prompt = [text, ...args].join(' --')
   // if (!prompt.includes('--quality') && !prompt.includes('--q')) {
