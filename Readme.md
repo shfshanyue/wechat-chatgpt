@@ -26,14 +26,19 @@
 + [ ] URL阅读：可阅读 URL 等内容，并根据 URL 内容进行回答
 + [ ] 自动总结：转发公众号文章链接至机器人，自动总结内容
 
-功能呢截图及文档见：<https://bot.prochat.tech/wechat/feature>
-
 如果需要搭建基于 ChatGPT 的飞书、钉钉、企微内部应用、公众号机器人，可参考个人的另一项目 [feishu-chatgpt](https://github.com/shfshanyue/feishu-chatgpt)。
 
 ## 环境要求
 
 1. `node.js >= 18`
-2. 基于 Web 协议的机器人最近有可能被封禁，可采用 iPad 其它协议的机器人，可在 `index.ts` 中更换其他 `Puppet`。
+2. 服务器非 arm 架构
+
+## 注意事项
+
+1. midjourney 基于模拟请求方式进行调用绘画等，midjourney 会持续进行反爬，因此有时无法正常返回图片，甚至会被封禁。
+2. midjourney 基于 [midjourney-api](https://github.com/erictik/midjourney-api) 进行开发，请实时保持在最新或者次新版本，避免反爬策略
+3. 在国内网络无法访问 ChatGPT 服务及 Midjourney 服务
+4. ChatGPT 的 token 有基于每分钟 3 次请求的限流策略，如果访问人数过大，请配置多个 token，并限制使用人数（比如逐步放开使用微信机器人，不要同一时间涌入大量请求）。否则 ChatGPT 及 Midjourney (依赖 ChatGPT 进行翻译) 将不会正常工作
 
 ## 配置与环境变量
 
@@ -92,7 +97,7 @@ OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC,k-xxxxxxxxxxxxxxx
 | MJ_SALAI_TOKEN      | Midjorney 的 User Token，如何获取见 [如何获取 Midjourney 的 token](https://www.androidauthority.com/get-discord-token-3149920/)             |                        |
 | MJ_SERVER_ID       | Midjorney 的 ServerID |                        |
 | MJ_CHANNEL_ID      | Midjorney 的 ChannelID |                        |
-| DEFAULT_FREE_CREDIT | 默认每天的免费使用次数，ChatGPT 算一次，MidJourney 算十次 | 1000                       |
+| DEFAULT_FREE_CREDIT | 默认每天的免费使用次数，ChatGPT 算一次，MidJourney 算五次 | 30                       |
 | OSS_REGION= | OSS 配置，存储 MidJourney 图片，选填 | |
 | OSS_ACCESS_KEY_ID= | OSS 配置，存储 MidJourney 图片 | |
 | OSS_ACCESS_KEY_SECRET= | OSS 配置，存储 MidJourney 图片 | |
@@ -100,14 +105,13 @@ OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC,k-xxxxxxxxxxxxxxx
 
 ## 每天次数限制配置
 
-为了避免 MidJourney 及 ChatGPT 每天耗费额度过大，可通过环境变量 `DEFAULT_FREE_CREDIT` 可配置每用户每天限制使用次数，默认为 100 次点数。
+为了避免 MidJourney 及 ChatGPT 每天耗费额度过大，可通过环境变量 `DEFAULT_FREE_CREDIT` 可配置每用户每天限制使用次数，默认为 30 次点数。
 
 默认消耗次数规则为：
 
 1. ChatGPT 提问消耗一次点数
 1. Midjourney 画图消耗五次点数
 1. Midjourney 图生图消耗五次点数
-1. Midjourney 图生文消耗三次点数
 
 ## 企业微信
 
@@ -119,7 +123,7 @@ WECHATY_PUPPET_SERVICE_TOKEN="puppet_workpro_xxxxxxxxx"
 WECHATY_PUPPET="wechaty-puppet-service"
 ```
 
-## 步骤
+## 启动步骤
 
 1. 编辑环境变量
 
@@ -127,13 +131,16 @@ WECHATY_PUPPET="wechaty-puppet-service"
 $ cp .example.env .env
 ```
 
-并编辑以下环境变量。**注意，如果你在国内服务器部署，必须配置 `BASE_URL` 环境变量，其为 OpenAI 在国内的代理 API，需自行搭建**。
+并编辑以下环境变量。
 
 ``` bash
 # 如果部署在 vercel 等境外服务器，则不需要此项配置
-# 如果部署在境内，可以使用山月的临时代理 API，不过强烈建议自行搭建
-BASE_URL="https://ai.devtool.tech/proxy"
 OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+WECHATY_PUPPET="wechaty-puppet-wechat"
+PROMPT="你是一个基于 GPT-3.5 的友好型的微信聊天机器人，是山月的 AI 小助手，使用了来自 WeChaty（源代码可在 https://github.com/shfshanyue/wechat-chatgpt 找到）的底层技术。你具有以下独特功能：\n\n1. 绘画：在消息开头使用 "画" (Draw) 命令，你可以创建高清的 MidJourney 图片。\n2. 知识渊博：我掌握了各种领域和行业的广泛知识。\n3. 富有同理心：你会耐心回答用户的任何问题。当用户感到沮丧或挫败时，你会提供安慰和理解。"
+MJ_SALAI_TOKEN=xxx
+MJ_SERVER_ID=xxx
+MJ_CHANNEL_ID=xxx
 ```
 
 2. 编辑是否允许群聊以及私聊
@@ -163,10 +170,20 @@ OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 }
 ```
 
-3. 开启一个微信机器人，使用将要作为机器人的微信扫码进行登录
+3. 配置 redis
 
 ``` bash
 $ apt install redis
+# 启动 redis
+$ redis-server
+
+# 修改 /etc/hosts，如无法修改可配置 lib/redis.ts 中的 host 参数
+$ echo "127.0.0.1 redis" >> /etc/hosts
+```
+
+4. 开启一个微信机器人，使用将要作为机器人的微信扫码进行登录
+
+``` bash
 $ apt install ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
 
 $ pnpm i
@@ -177,17 +194,24 @@ $ pnpm start
 
 此时会出现二维码链接，通过链接链接打开二维码，扫码登录。待出现登录成功字样时，则机器人成功开启。
 
-4. 健康检查
+5. 健康检查
 
 向机器人发送 `/ping` 指定，它会默认回复 `pong`。以确保机器人已经正常工作。
 
 <img src="https://static.shanyue.tech/images/23-03-31/clipboard-7744.654969.webp" width="400">
 
-5. 与机器人对话
+6. 与机器人对话
 
 <img src="https://static.shanyue.tech/images/23-03-31/clipboard-5702.703b02.webp" width="400">
 
 ## 部署方式
+
+**注意事项**：
+
+1. 推荐在 Ubuntu 2204 系统中进行部署
+1. 推荐使用 Docker 方式部署
+1. 在 ARM 架构上部署可能失败，不推荐此方式
+1. 该项目依赖 redis，需要启动 redis 服务，并修改 /etc/hosts。如无法修改，可搜索代码，修改 redis 中的 host 配置
 
 ### Docker
 
@@ -199,7 +223,13 @@ $ docker compose up -d --build
 $ docker compose logs --tail 100 --follow
 ```
 
+### 本地/服务器部署
+
+按照以上启动步骤进行本地/服务器部署。
+
 ### 私有化部署
+
+**非常不推荐该部署方式**
 
 在本地操作：
 
@@ -211,7 +241,7 @@ $ rsync -lahvz --exclude ./lib --exclude ./message --exclude logs --exclude node
 在目标服务器：
 
 ``` bash
-# 同时修改 /etc/hosts
+# 同时启动 redis 以及修改 /etc/hosts
 $ apt install redis
 $ apt install ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
 
@@ -219,15 +249,3 @@ $ pnpm i
 $ npx prisma generate
 $ pnpm start:prod
 ```
-
-## 商务合作与交流
-
-如果开源版无法满足您团队或公司的需求，推荐我们团队商业开发的基于 ChatGPT 的飞书、钉钉、企微内部应用、公众号、个人微信、企业微信的 SaaS 平台。
-
-1. 基于 ChatGPT 的飞书、钉钉、企微内部应用、公众号、个人微信、企业微信的 SaaS 平台 (内测中)
-1. 企业级私有部署服务或者 Sass 部署
-1. 若仅仅需要提供部署服务指导，可付费咨询，订阅包年服务
-1. 若需二次开发定制服务，可付费开发
-
-<img src="https://static.shanyue.tech/images/23-04-02/wechat.892011.webp" width="600">
-
