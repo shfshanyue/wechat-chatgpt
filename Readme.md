@@ -119,8 +119,9 @@ OPEN_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxybnC,k-xxxxxxxxxxxxxxx
 
 ``` bash
 # 如果是企业微信的话，使用以下两行代码
+# Token 可以在https://tss.rpachat.com/dashboard/token获取
 WECHATY_PUPPET_SERVICE_TOKEN="puppet_workpro_xxxxxxxxx"
-WECHATY_PUPPET="wechaty-puppet-service"
+WECHATY_PUPPET="@juzi/wechaty-puppet-service"
 ```
 
 ## 启动步骤

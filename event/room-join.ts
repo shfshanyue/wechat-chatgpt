@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { Contact, Room } from 'wechaty'
+import { Contact, Room } from '@juzi/wechaty'
 import { logger } from '../lib/logger'
 
 const hello = (contact: Contact) => _.trim(`

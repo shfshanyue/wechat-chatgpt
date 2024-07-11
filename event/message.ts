@@ -1,6 +1,6 @@
-import { Message } from 'wechaty'
-import { Message as MessageType } from 'wechaty-puppet/types'
-import { Contact as ContactType } from 'wechaty-puppet/types'
+import { Message } from '@juzi/wechaty'
+import { Message as MessageType } from '@juzi/wechaty-puppet/types'
+import { Contact as ContactType } from '@juzi/wechaty-puppet/types'
 import { routes } from '../message'
 import { logger } from '../lib/logger'
 

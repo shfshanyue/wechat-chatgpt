@@ -1,4 +1,4 @@
-import { Wechaty } from 'wechaty'
+import { Wechaty } from '@juzi/wechaty'
 import * as Sentry from '@sentry/node'
 import path from 'path'
 import fs from 'fs'

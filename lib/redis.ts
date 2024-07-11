@@ -5,5 +5,5 @@ import Redis from 'ioredis'
 // By default, it will connect to localhost:6379.
 // We are going to cover how to specify connection options soon.
 export const redis = new Redis({
-  host: 'redis'
+  host: '127.0.0.1'
 })

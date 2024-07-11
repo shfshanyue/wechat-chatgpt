@@ -1,5 +1,5 @@
 import Koa from 'koa'
-import { Wechaty } from 'wechaty'
+import { Wechaty } from '@juzi/wechaty'
 
 import { createBot } from './bot'
 import * as message from './event/message'

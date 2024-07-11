@@ -1,4 +1,4 @@
-import { Message, Sayable } from 'wechaty'
+import { Message, Sayable } from '@juzi/wechaty'
 import { FileBox } from 'file-box'
 import { PrismaClient } from '@prisma/client'
 

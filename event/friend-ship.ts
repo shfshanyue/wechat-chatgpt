@@ -1,5 +1,5 @@
-import { Friendship } from 'wechaty'
-import { Friendship as FriendshipType } from 'wechaty-puppet/types'
+import { Friendship } from '@juzi/wechaty'
+import { Friendship as FriendshipType } from '@juzi/wechaty-puppet/types'
 import config from '../config'
 
 // 添加好友
